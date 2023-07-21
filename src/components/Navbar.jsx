@@ -5,9 +5,12 @@ import { FiPlus } from 'react-icons/fi';
 import { PiMoonStarsDuotone } from 'react-icons/pi'
 import { Link } from 'react-router-dom';
 
-export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
+
+export default function Navbar({ isAuthenticated, setIsAuthenticated, user }) {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     const [dropDown, setDropDown] = useState(false);
+
+
 
     useEffect(() => {
         if (localStorage.getItem('theme') === 'dark') {
@@ -35,7 +38,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
                 <div className='flex items-center'>
                     <input type="text" placeholder='Search...' className='max-md:hidden rounded-md  mx-3 px-3 py-1 dark:bg-neutral-800 border dark:border-neutral-700 border-neutral-400  focus:ring-1 dark:focus:ring-neutral-800 focus:ring-neutral-500 outline-none w-64 focus:w-80 transition-all' />
                     <button onClick={() => { setIsDarkTheme(!isDarkTheme) }} className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'>{isDarkTheme ? <CgSun className='text-2xl' /> : <PiMoonStarsDuotone className='text-2xl' />}</button>
-                    <button className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'><FiPlus className='text-2xl' /></button>
+                    <Link to={'/post/create'} className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'><FiPlus className='text-2xl' /></Link>
                     <button onClick={() => setDropDown(!dropDown)} className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'><CgProfile className='text-2xl' /></button>
                 </div>
             </nav>
@@ -48,23 +51,24 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
                         </div>
                         <p className="text-2xl  text-center font-bold">Sign Up in your DevCritique Account</p>
                         <div className="flex gap-3 my-4 justify-center ">
-                            <Link to="/signup" onClick={() => setDropDown(false)} className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-emerald-500 rounded-3xl shadow-md hover:bg-emerald-400 hover:scale-95 transition-all">Sign up</Link>
-                            <Link to="/login" onClick={() => setDropDown(false)} className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-emerald-500 rounded-3xl shadow-md hover:bg-emerald-400 hover:scale-95 transition-all">Log in</Link>
+                            <Link to="/signup" onClick={() => setDropDown(false)} className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-violet-500 rounded-3xl shadow-md hover:bg-violet-400 hover:scale-95 transition-all">Sign up</Link>
+                            <Link to="/login" onClick={() => setDropDown(false)} className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-violet-500 rounded-3xl shadow-md hover:bg-violet-400 hover:scale-95 transition-all">Log in</Link>
                         </div>
                     </div>}
 
                 {isAuthenticated && <ul className="p-2 flex flex-col ">
-                    <p className='text-lg px-3 py-2 '>Nilesh</p>
+                    <p className='text-lg px-3 py-2 '>{user.username}</p>
                     <hr />
-                    <Link to={'/@nilesh'} onClick={() => setDropDown(false)} className='px-3 py-2 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all '>Profile</Link>
-                    <Link to={'/'} onClick={() => { setIsAuthenticated(false); setDropDown(false) }} className='px-3 py-2 text-red-500 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all '>Logout</Link>
+                    <Link to={`/@${user.username}`} onClick={() => setDropDown(false)} className='px-3 py-2 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all '>Profile</Link>
+                    <Link to={'/'} onClick={() => { setIsAuthenticated(false); localStorage.clear(); setDropDown(false) }} className='px-3 py-2 text-red-500 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all '>Logout</Link>
                 </ul>
                 }
 
             </div>
             <div className='md:hidden w-full dark:bg-neutral-900/60 bg-neutral-100/60 p-3'>
-                <input type="text" placeholder='Search...' className=' rounded-md w-full px-3 py-1 dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-200' />
+                <input type="text" placeholder='Search...' className=' rounded-md w-full px-3 py-1 dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200' />
             </div>
+
         </>
     )
 }
