@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, useNavigate } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import Post from "./pages/Post"
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import NotFound from "./pages/NotFound"
-import { ToastContainer } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import PostCreate from "./pages/PostCreate"
 import EditProfile from "./pages/EditProfile"
@@ -15,15 +15,30 @@ import axios from "axios"
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({})
+  const navigate = useNavigate();
 
   const updateUser = () => {
-    const user1 = JSON.parse(localStorage.getItem('user'));
-    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user1.username}`).then((res) => {
-      localStorage.setItem('user', JSON.stringify(res.data.user))
-      // console.log(res.data.user);
-      setUser(res.data.user)
+    const token = (localStorage.getItem('token'));
+    axios.post(`${import.meta.env.VITE_API_URL}/api/checkToken`, { token: token }).then((res) => {
+      if (res.data.status) {
+        localStorage.setItem('user', JSON.stringify(res.data.user))
+        setUser(res.data.user)
+        console.log(res.data.user);
+      } else {
+        localStorage.clear()
+        setIsAuthenticated(false)
+        setUser({})
+        toast.error("something went wrong!!")
+      }
     }).catch((err) => {
+      localStorage.clear()
+      setIsAuthenticated(false)
+      setUser({})
       console.log(err);
+      if (!err.data.response.status) {
+        toast.error("something went wrong!!")
+        navigate('/');
+      }
     })
   }
 
@@ -35,10 +50,8 @@ function App() {
     } else {
       setUser(JSON.parse(localStorage.getItem("user")))
       setIsAuthenticated(true)
-      // if (user?.username) {
-      updateUser();
-      // }
     }
+    updateUser();
   }, [isAuthenticated])
 
 
