@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 
-export default function EditProfile({ user, isAuthenticated, updateUser }) {
+export default function EditProfile({ user, updateUser }) {
     const [userInfo, setUserInfo] = useState({})
     const [loading, setLoading] = useState(false)
     const [file, setFile] = useState(null)
@@ -13,7 +13,7 @@ export default function EditProfile({ user, isAuthenticated, updateUser }) {
     const socialMedia = ['twitter', 'instagram', 'facebook', 'linkedin', 'github', 'website'];
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (localStorage.getItem("token") && localStorage.getItem("token") != 'undefined') {
             // console.log(user);
             setUserInfo({
                 ...user, socialMediaLinks: {
@@ -29,7 +29,7 @@ export default function EditProfile({ user, isAuthenticated, updateUser }) {
         } else {
             navigate('/');
         }
-    }, [])
+    }, [user])
 
 
     const handleSubmit = async () => {

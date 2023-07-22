@@ -39,8 +39,9 @@ export default function Profile({ user }) {
     useEffect(() => {
         if (username[0] !== "@") {
             navigate('/notfound');
+        } else {
+            getProjects();
         }
-        getProjects();
     }, [])
 
     return (

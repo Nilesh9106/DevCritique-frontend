@@ -17,8 +17,10 @@ function App() {
   const [user, setUser] = useState({})
 
   const updateUser = () => {
-    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user.username}`).then((res) => {
+    const user1 = JSON.parse(localStorage.getItem('user'));
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user1.username}`).then((res) => {
       localStorage.setItem('user', JSON.stringify(res.data.user))
+      // console.log(res.data.user);
       setUser(res.data.user)
     }).catch((err) => {
       console.log(err);
@@ -33,14 +35,12 @@ function App() {
     } else {
       setUser(JSON.parse(localStorage.getItem("user")))
       setIsAuthenticated(true)
+      // if (user?.username) {
+      updateUser();
+      // }
     }
   }, [isAuthenticated])
 
-  useEffect(() => {
-    if (user.username) {
-      updateUser();
-    }
-  }, [])
 
 
 
