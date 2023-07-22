@@ -13,7 +13,7 @@ function Review({ text, rating, status, author, comments }) {
         <>
             <div className='p-4 cursor-pointer w-full rounded max-sm:px-2  border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
 
-                {/* <img src={author.img} alt={author.name} className='sm:w-10 sm:h-10 w-8 h-8' /> */}
+                <img src={author.profilePicture || '/user.png'} alt={author.name} className='sm:w-10  sm:h-10 rounded-full w-8 h-8' />
 
                 <div className='px-2 max-sm:px-0 flex w-full flex-col  gap-1'>
                     <div className='flex justify-between gap-2 w-full'>

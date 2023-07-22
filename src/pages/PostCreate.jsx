@@ -33,6 +33,7 @@ export default function PostCreate({ isAuthenticated, user }) {
 
     useEffect(() => {
         if (!isAuthenticated) {
+            toast.warning("Please Login to Post Project");
             navigate('/login');
         } else {
             setProject({ ...project, author: user._id })

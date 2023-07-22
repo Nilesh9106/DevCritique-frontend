@@ -10,9 +10,20 @@ import NotFound from "./pages/NotFound"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import PostCreate from "./pages/PostCreate"
+import EditProfile from "./pages/EditProfile"
+import axios from "axios"
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({})
+
+  const updateUser = () => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user.username}`).then((res) => {
+      localStorage.setItem('user', JSON.stringify(res.data.user))
+      setUser(res.data.user)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
   useEffect(() => {
     if (!localStorage.getItem("token") || localStorage.getItem("token") == 'undefined') {
@@ -24,6 +35,13 @@ function App() {
       setIsAuthenticated(true)
     }
   }, [isAuthenticated])
+
+  useEffect(() => {
+    if (user.username) {
+      updateUser();
+    }
+  }, [])
+
 
 
   return (
@@ -51,7 +69,7 @@ function App() {
 
         <Route path="/post/create" element={<PostCreate isAuthenticated={isAuthenticated} user={user} />} />
         <Route path="/post/:id" element={<Post />} />
-
+        <Route path="/editprofile" element={<EditProfile user={user} isAuthenticated={isAuthenticated} updateUser={updateUser} />} />
         <Route path="/notfound" element={<NotFound />} />
         <Route path="/:username" element={<Profile user={user} isAuthenticated={isAuthenticated} />} />
 

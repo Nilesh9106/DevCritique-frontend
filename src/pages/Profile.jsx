@@ -49,7 +49,7 @@ export default function Profile({ user }) {
             <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700  py-5 px-3  `}>
                 <div className="flex gap-5 flex-wrap justify-center items-center ">
                     <div className="img">
-                        <img src="https://nileshdarji.netlify.app/main.png" alt={userInfo.username} className="rounded-full sm:w-40 w-24" />
+                        <img src={userInfo.profilePicture || '/user.png'} alt={userInfo.username} className="rounded-full sm:w-40 w-24" />
                     </div>
                     <div className="flex flex-col sm:mx-10 justify-center">
                         <div className="flex sm:gap-5 gap-3 items-center my-2">
@@ -58,18 +58,19 @@ export default function Profile({ user }) {
                         </div>
                         <div className="flex sm:gap-5 gap-3 items-center my-2">
                             {
-                                Object.keys(user?.socialMediaLinks || []).map((key) => {
+                                Object.keys(userInfo?.socialMediaLinks || []).map((key) => {
+                                    if (userInfo.socialMediaLinks[key] === '') return null;
                                     switch (key) {
                                         case "github":
-                                            return <Link to={userInfo.socialMediaLinks[key]}><SiGithub className="text-xl " /></Link>
+                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiGithub className="text-xl " /></Link>
                                         case "twitter":
-                                            return <Link to={userInfo.socialMediaLinks[key]}><SiTwitter className="text-xl " /></Link>
+                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiTwitter className="text-xl " /></Link>
                                         case "linkedin":
-                                            return <Link to={userInfo.socialMediaLinks[key]}><SiLinkedin className="text-xl " /></Link>
+                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiLinkedin className="text-xl " /></Link>
                                         case "instagram":
-                                            return <Link to={userInfo.socialMediaLinks[key]}><SiInstagram className="text-xl " /></Link>
+                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiInstagram className="text-xl " /></Link>
                                         default:
-                                            return <Link to={userInfo.socialMediaLinks[key]}><BiWorld className="text-xl " /></Link>
+                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><BiWorld className="text-xl " /></Link>
                                     }
                                 })
                             }
