@@ -39,7 +39,7 @@ export default function EditProfile({ user, updateUser }) {
             const formData = new FormData();
             formData.append('file', file);
             setLoading(true)
-            axios.post(`${import.meta.env.VITE_API_URL}/api/file/upload?parent_id=${userInfo.username}`, formData, {
+            axios.post(`${import.meta.env.VITE_API_URL}/api/file/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -106,7 +106,7 @@ export default function EditProfile({ user, updateUser }) {
                     <div className="md:order-2 order-1 flex flex-col items-center border dark:border-neutral-800">
                         <img src={(file && URL.createObjectURL(file)) || userInfo.profilePicture || '/user.png'} alt="Profile" className="w-60 rounded-full aspect-square" />
                         <div className="p-3 flex gap-2 max-md:flex-wrap">
-                            <input onChange={(e) => { setFile(e.target.files[0]); }} className="block w-full text-lg text-neutral-900 border border-neutral-300 rounded-lg cursor-pointer bg-neutral-50 dark:text-neutral-400 focus:outline-none dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400" id="file_input" type="file" />
+                            <input onChange={(e) => { setFile(e.target.files[0]); }} accept="image/*" className="block w-full text-lg text-neutral-900 border border-neutral-300 rounded-lg cursor-pointer bg-neutral-50 dark:text-neutral-400 focus:outline-none dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400" id="file_input" type="file" />
                             <button onClick={() => { setFile(null); userInfo.profilePicture = '/user.png'; setUserInfo({ ...userInfo }) }} className="flex-shrink-0 px-2 py-1 text-base font-semibold text-white bg-violet-500 rounded-3xl shadow-md hover:bg-violet-400 hover:scale-95 transition-all">Remove</button>
                         </div>
                     </div>

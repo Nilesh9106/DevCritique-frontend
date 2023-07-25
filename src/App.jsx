@@ -19,11 +19,14 @@ function App() {
 
   const updateUser = () => {
     const token = (localStorage.getItem('token'));
+    if (!token) {
+      return;
+    }
     axios.post(`${import.meta.env.VITE_API_URL}/api/checkToken`, { token: token }).then((res) => {
       if (res.data.status) {
         localStorage.setItem('user', JSON.stringify(res.data.user))
         setUser(res.data.user)
-        console.log(res.data.user);
+        // console.log(res.data.user);
       } else {
         localStorage.clear()
         setIsAuthenticated(false)
@@ -81,7 +84,7 @@ function App() {
         </>}
 
         <Route path="/post/create" element={<PostCreate isAuthenticated={isAuthenticated} user={user} />} />
-        <Route path="/post/:id" element={<Post />} />
+        <Route path="/post/:id" element={<Post updateUser={updateUser} />} />
         <Route path="/editprofile" element={<EditProfile user={user} isAuthenticated={isAuthenticated} updateUser={updateUser} />} />
         <Route path="/notfound" element={<NotFound />} />
         <Route path="/:username" element={<Profile user={user} isAuthenticated={isAuthenticated} />} />

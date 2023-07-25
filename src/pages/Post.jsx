@@ -1,13 +1,17 @@
+/* eslint-disable react/prop-types */
 import { useParams } from "react-router-dom";
 import Project from "../components/Project";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Review from "../components/Review";
+import { toast } from "react-toastify";
 
 
-export default function Post() {
+export default function Post({ updateUser }) {
   const { id } = useParams();
+  // const navigate = useNavigate();
+  const [review, setReview] = useState({});
   const [project, setProject] = useState({});
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,6 +24,11 @@ export default function Post() {
       setReviews(response.data.reviews);
       // console.log(response.data, id);
       // console.log(response.data);
+      setReview({
+        text: "",
+        project: response.data.project._id,
+        author: localStorage.getItem('token') && JSON.parse(localStorage.getItem('user'))._id
+      })
       setLoading(false)
     } catch (error) {
       // Handle error if the request fails
@@ -29,7 +38,35 @@ export default function Post() {
     }
   }
 
+  const handleReview = async () => {
+    if (localStorage.getItem('token') == '' || !localStorage.getItem('token')) {
+      toast.error("Please login for reviewing project!!")
+    }
+    console.log(review);
+    setLoading(true);
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review);
+      console.log(res.data);
+
+      getProject();
+
+      toast.success("you reviewed the project successfully!!")
+
+      setLoading(false)
+    } catch (error) {
+      // Handle error if the request fails
+      console.error('Error uploading review:', error);
+      setLoading(false)
+
+    }
+    setReview({
+      ...review,
+      text: "",
+    })
+  }
+
   useEffect(() => {
+    updateUser();
     getProject();
   }, [])
 
@@ -38,9 +75,16 @@ export default function Post() {
       <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex justify-center  py-3  `}>
         {loading ? <Loading /> : project.link && <Project {...project} />}
       </div>
-      <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex justify-center  py-3  `}>
+      <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex flex-col justify-center  py-3  `}>
+        <div>
+          <textarea name="review" value={review.text} onChange={(e) => {
+            setReview({ ...review, text: e.target.value })
+          }} placeholder='Description of your Review' className='w-full resize-none px-3 py-1 my-1 rounded-md dark:bg-neutral-900 outline-none transition-all border dark:border-neutral-800 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200' cols="30" rows="3">
+          </textarea>
+          <button type="submit" onClick={handleReview} className="w-full px-3 py-1 mb-3 text-neutral-200 rounded-md bg-violet-600 hover:bg-violet-500 transition-all duration-300" >Submit</button>
+        </div>
         {reviews.length == 0 ?
-          <p className="text-center text-violet-600 text-2xl"> No review yet!!</p>
+          <p className="text-center text-violet-600 text-2xl block "> No review yet!!</p>
           :
           reviews.map((value, index) => {
             return <Review key={index} {...value} />
