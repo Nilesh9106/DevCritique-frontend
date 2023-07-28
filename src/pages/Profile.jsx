@@ -63,15 +63,15 @@ export default function Profile({ user }) {
                                     if (userInfo.socialMediaLinks[key] === '') return null;
                                     switch (key) {
                                         case "github":
-                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiGithub className="text-xl " /></Link>
+                                            return <Link target="_blank" key={key} to={userInfo.socialMediaLinks[key]}><SiGithub className="text-xl " /></Link>
                                         case "twitter":
-                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiTwitter className="text-xl " /></Link>
+                                            return <Link target="_blank" key={key} to={userInfo.socialMediaLinks[key]}><SiTwitter className="text-xl " /></Link>
                                         case "linkedin":
-                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiLinkedin className="text-xl " /></Link>
+                                            return <Link target="_blank" key={key} to={userInfo.socialMediaLinks[key]}><SiLinkedin className="text-xl " /></Link>
                                         case "instagram":
-                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><SiInstagram className="text-xl " /></Link>
+                                            return <Link target="_blank" key={key} to={userInfo.socialMediaLinks[key]}><SiInstagram className="text-xl " /></Link>
                                         default:
-                                            return <Link key={key} to={userInfo.socialMediaLinks[key]}><BiWorld className="text-xl " /></Link>
+                                            return <Link target="_blank" key={key} to={userInfo.socialMediaLinks[key]}><BiWorld className="text-xl " /></Link>
                                     }
                                 })
                             }
@@ -82,7 +82,7 @@ export default function Profile({ user }) {
                     </div>
                 </div>
             </div>
-            <ul className='mx-auto z-40 flex dark:bg-neutral-900/70 bg-neutral-100/70 backdrop-blur-sm  lg:w-2/3 sm:w-3/4  w-[95%]  rounded-b-md sticky top-16 my-5 border  dark:border-gray-700 py-4 px-3 justify-evenly items-center'>
+            <ul className='mx-auto flex dark:bg-neutral-900/70 bg-neutral-100/70 backdrop-blur-sm  lg:w-2/3 sm:w-3/4  w-[95%]  rounded-b-md  my-5 border  dark:border-gray-700 py-4 px-3 justify-evenly items-center'>
                 <li className={`cursor-pointer ${tabName === "Project" ? "text-violet-400" : ""}`} onClick={() => {
                     setTabName("Project")
                 }}>Projects</li>

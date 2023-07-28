@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link, useNavigate } from 'react-router-dom';
+import User from './User';
 
 
 function OpenGraphDetails({ description, link, author, _id, ogDetails }) {
@@ -11,10 +12,10 @@ function OpenGraphDetails({ description, link, author, _id, ogDetails }) {
         <>
             <div onClick={() => navigate(`/post/${_id}`)} className='p-4 cursor-pointer rounded max-sm:px-2  border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
 
-                <img src={author.profilePicture || '/user.png'} alt={author.name} className='sm:w-10 rounded-full sm:h-10 w-8 h-8 aspect-square' />
+                {/* <img src={author.profilePicture || '/user.png'} alt={author.name} className='sm:w-10 rounded-full sm:h-10 w-8 h-8 aspect-square' /> */}
 
-                <div className='px-2 max-sm:px-0 flex flex-col  gap-1'>
-                    <Link to={`/@${author?.username}`} onClick={(e) => e.stopPropagation()} className='text-lg max-sm:text-base max-w-fit font-semibold'>@{author?.username}</Link>
+                <div className='px-2 max-sm:px-0 flex flex-col  gap-2'>
+                    <User author={author} />
 
                     <p>{description}</p>
 

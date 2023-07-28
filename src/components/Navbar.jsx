@@ -31,7 +31,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, user }) {
 
     return (
         <>
-            <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
+            <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 z-40 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
                 <Link to={'/'} className="text-2xl">
                     DEV CRITIQUE
                 </Link>
