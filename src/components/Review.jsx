@@ -47,7 +47,7 @@ function Review({ _id, text, rating, status, author, comments, project }) {
                                         <span className={`rounded-3xl  flex max-w-fit items-center  ${status == "pending" ? "bg-violet-400" : (status == "solved" ? "bg-green-400" : "bg-red-400")} capitalize text-black  py-0.5 px-3 gap-1  transition-all duration-300 shadow-lg`}>
                                             {status}
                                         </span>
-                                        {rating &&
+                                        {rating && rating != 0 &&
                                             <span className={`rounded-3xl  flex max-w-fit items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-gray-700 py-0.5 px-3 gap-1  transition-all duration-300 shadow-lg`}>
                                                 {rating} <PiStarFourFill className='text-yellow-400 text-lg' />
                                             </span>
@@ -65,7 +65,7 @@ function Review({ _id, text, rating, status, author, comments, project }) {
                                         <select value={newRating} name="status" onChange={(e) => {
                                             setNewRating(e.target.value);
                                         }} className={`rounded-3xl dark:bg-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-800  border border-gray-700 py-0.5 px-2 transition-all duration-300 shadow-lg`}  >
-                                            <option value="0">No Value</option>
+                                            <option value={0}>0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>

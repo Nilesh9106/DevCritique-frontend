@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Review from "../components/Review";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 
 export default function Post({ updateUser }) {
@@ -72,6 +73,25 @@ export default function Post({ updateUser }) {
 
   return (
     <>
+      {!loading &&
+        <Helmet>
+          <title>{project.ogDetails?.title}</title>
+          <meta name="description" content={project.description} />
+          <meta name="keywords" content={project.tags} />
+          <meta name="author" content={project.author?.username} />
+
+          <meta property="og:title" content={project.ogDetails?.title || "Dev Critique"} />
+          <meta property="og:description" content={project.description} />
+          {project.ogDetails?.image && <meta property="og:image" content={project.ogDetails.image} />}
+          <meta property="og:url" content={window.location.href} />
+
+          <meta name="twitter:title" content={project.ogDetails?.title || "Dev Critique"} />
+          <meta name="twitter:description" content={project.description} />
+          {project.ogDetails?.image && <meta name="twitter:image" content={project.ogDetails.image} />}
+          <meta name="twitter:card" content="summary_large_image" />
+
+        </Helmet>
+      }
       <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex justify-center  py-3  `}>
         {loading ? <Loading /> : project.link && <Project {...project} />}
       </div>

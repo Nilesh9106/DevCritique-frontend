@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PostCreate from "./pages/PostCreate"
 import EditProfile from "./pages/EditProfile"
 import axios from "axios"
+import Footer from "./components/Footer"
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({})
@@ -91,6 +92,8 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      <Footer />
     </>
   )
 }
