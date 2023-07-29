@@ -33,7 +33,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, user }) {
         <>
             <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 z-40 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
                 <Link to={'/'} className="text-2xl flex gap-2 items-center">
-                    <img src="/icon2.png" className='h-9 aspect-square' alt="dev critique" />
+                    <img src="/icon2.png" className='h-10 aspect-square' alt="dev critique" />
                     DEV CRITIQUE
                 </Link>
                 <div className='flex items-center'>
