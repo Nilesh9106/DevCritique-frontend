@@ -41,7 +41,8 @@ export default function EditProfile({ user, updateUser }) {
             setLoading(true)
             axios.post(`${import.meta.env.VITE_API_URL}/api/file/upload`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    "Authorization": localStorage.getItem('token')
                 }
             }).then((res) => {
                 const url = res.data.fileURL;

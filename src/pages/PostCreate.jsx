@@ -20,7 +20,7 @@ export default function PostCreate({ isAuthenticated, user }) {
         element.preventDefault();
 
         setLoading(true);
-        axios.post(`${import.meta.env.VITE_API_URL}/api/projects`, project).then((res) => {
+        axios.post(`${import.meta.env.VITE_API_URL}/api/projects`, project, { headers: { 'Authorization': localStorage.getItem('token') } }).then((res) => {
             console.log(res.data);
             toast.success("Project Posted Successfully");
             navigate(`/post/${res.data._id}`);

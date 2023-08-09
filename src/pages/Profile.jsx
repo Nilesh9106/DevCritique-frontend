@@ -8,6 +8,7 @@ import { SiGithub, SiInstagram, SiLinkedin, SiTwitter } from 'react-icons/si'
 import { BiWorld } from "react-icons/bi"
 import axios from "axios";
 import Loading from "../components/Loading";
+import { Helmet } from "react-helmet-async";
 
 export default function Profile({ user }) {
     const { username } = useParams();
@@ -47,6 +48,15 @@ export default function Profile({ user }) {
     return (
         <>
             {loading && <Loading />}
+            <Helmet>
+                <title>{userInfo?.username}</title>
+                <meta property="og:title" content={userInfo?.username || "Dev Critique"} />
+                {userInfo?.profilePicture && <meta property="og:image" content={userInfo.profilePicture} />}
+                <meta property="og:url" content={window.location.href} />
+                <meta name="twitter:title" content={userInfo.username || "Dev Critique"} />
+                {userInfo?.profilePicture && <meta name="twitter:image" content={userInfo?.profilePicture} />}
+                <meta name="twitter:card" content="summary_large_image" />
+            </Helmet>
             <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700  py-5 px-3  `}>
                 <div className="flex gap-5 flex-wrap justify-center items-center ">
                     <div className="img">

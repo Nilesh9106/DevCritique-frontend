@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 export default function Footer() {
     return (
         <>
-
-
-
             <footer className="w-full bg-neutral-100 dark:bg-neutral-900/30 mt-5" aria-labelledby="footer-heading">
                 <h2 id="footer-heading" className="sr-only">Footer</h2>
                 <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:px-16">

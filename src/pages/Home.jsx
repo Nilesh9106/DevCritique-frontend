@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import Project from "../components/Project"
 import axios from "axios";
 import Loading from "../components/Loading";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 
 export default function Home() {

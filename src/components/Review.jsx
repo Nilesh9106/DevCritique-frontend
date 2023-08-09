@@ -6,7 +6,7 @@ import { SlRefresh } from 'react-icons/sl';
 import User from './User';
 
 
-function Review({ _id, text, rating, status, author, comments, project }) {
+function Review({ _id, text, rating, status, author, comments, project, updateUser }) {
     // const navigate = useNavigate();
     const [newStatus, setNewStatus] = useState(status);
     const [newRating, setNewRating] = useState(rating || 0);
@@ -20,11 +20,13 @@ function Review({ _id, text, rating, status, author, comments, project }) {
                 return;
             }
             setLoadingUpdate(true);
-            await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating });
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating }, { headers: { 'Authorization': localStorage.getItem('token') } });
+            await updateUser();
             setLoadingUpdate(false);
             // console.log(res.data);
         } catch (error) {
             console.log(error);
+            setLoadingUpdate(false);
         }
     }
 
@@ -62,16 +64,20 @@ function Review({ _id, text, rating, status, author, comments, project }) {
                                             <option value="solved">solved</option>
                                             <option value="rejected">rejected</option>
                                         </select>
-                                        <select value={newRating} name="status" onChange={(e) => {
-                                            setNewRating(e.target.value);
-                                        }} className={`rounded-3xl dark:bg-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-800  border border-gray-700 py-0.5 px-2 transition-all duration-300 shadow-lg`}  >
-                                            <option value={0}>0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+                                        {
+                                            newStatus == 'solved' && (
+                                                <select value={newRating} name="status" onChange={(e) => {
+                                                    setNewRating(e.target.value);
+                                                }} className={`rounded-3xl dark:bg-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-800  border border-gray-700 py-0.5 px-2 transition-all duration-300 shadow-lg`}  >
+                                                    <option value={0}>0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                            )
+                                        }
                                         {(newRating != rating || newStatus != status) &&
                                             <>
                                                 <button onClick={handleUpdate} className={`rounded-full  capitalize hover:bg-neutral-200 dark:hover:bg-neutral-900  p-2 aspect-square transition-all duration-300 shadow-lg`}><SlRefresh className='text-xl font-bold' /></button>

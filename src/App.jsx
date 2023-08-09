@@ -13,6 +13,7 @@ import PostCreate from "./pages/PostCreate"
 import EditProfile from "./pages/EditProfile"
 import axios from "axios"
 import Footer from "./components/Footer"
+import { HelmetProvider } from "react-helmet-async"
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({})
@@ -62,7 +63,9 @@ function App() {
 
 
   return (
-    <>
+
+    <HelmetProvider>
+
 
       <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} user={user} />
       <ToastContainer
@@ -94,7 +97,7 @@ function App() {
       </Routes>
 
       <Footer />
-    </>
+    </HelmetProvider>
   )
 }
 

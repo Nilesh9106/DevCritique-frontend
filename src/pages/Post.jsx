@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Review from "../components/Review";
 import { toast } from "react-toastify";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 
 export default function Post({ updateUser }) {
@@ -46,7 +46,7 @@ export default function Post({ updateUser }) {
     console.log(review);
     setLoading(true);
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review, { headers: { 'Authorization': localStorage.getItem('token') } });
       console.log(res.data);
 
       getProject();
@@ -107,7 +107,7 @@ export default function Post({ updateUser }) {
           <p className="text-center text-violet-600 text-2xl block "> No review yet!!</p>
           :
           reviews.map((value, index) => {
-            return <Review key={index} {...value} />
+            return <Review key={index} updateUser={updateUser} {...value} />
           })
         }
       </div>
