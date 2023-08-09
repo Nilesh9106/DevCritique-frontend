@@ -8,7 +8,7 @@ import { SiGithub, SiInstagram, SiLinkedin, SiTwitter } from 'react-icons/si'
 import { BiWorld } from "react-icons/bi"
 import axios from "axios";
 import Loading from "../components/Loading";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 
 export default function Profile({ user }) {
     const { username } = useParams();

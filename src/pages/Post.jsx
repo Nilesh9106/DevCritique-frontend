@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Review from "../components/Review";
 import { toast } from "react-toastify";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 
 
 export default function Post({ updateUser }) {

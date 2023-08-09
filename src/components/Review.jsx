@@ -6,13 +6,13 @@ import { SlRefresh } from 'react-icons/sl';
 import User from './User';
 
 
-function Review({ _id, text, rating, status, author, comments, project, updateUser }) {
+function Review({ _id, text, rating, status, author, project, updateUser }) {
     // const navigate = useNavigate();
     const [newStatus, setNewStatus] = useState(status);
     const [newRating, setNewRating] = useState(rating || 0);
     const [loadingUpdate, setLoadingUpdate] = useState(false);
 
-    console.log(comments);
+    // console.log(comments);
     // console.log(JSON.parse(localStorage.getItem('user'))._id, project.author);
     const handleUpdate = async () => {
         try {

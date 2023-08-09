@@ -13,7 +13,7 @@ import PostCreate from "./pages/PostCreate"
 import EditProfile from "./pages/EditProfile"
 import axios from "axios"
 import Footer from "./components/Footer"
-import { HelmetProvider } from "react-helmet-async"
+import { Helmet } from "react-helmet"
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({})
@@ -64,8 +64,38 @@ function App() {
 
   return (
 
-    <HelmetProvider>
-
+    <>
+      <Helmet>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+        <link rel="manifest" href="/icons/site.webmanifest" />
+        <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5" />
+        <link rel="shortcut icon" href="/icons/favicon.ico" />
+        <meta name="apple-mobile-web-app-title" content="DevCritique" />
+        <meta name="application-name" content="DevCritique" />
+        <meta name="msapplication-TileColor" content="#603cba" />
+        <meta name="msapplication-config" content="/icons/browserconfig.xml" />
+        <meta name="theme-color" content="#ffffff" />
+        <title>DevCritique - Share and Review Projects for Developers</title>
+        <meta name="description"
+          content="DevCritique is a platform to share and review websites, apps, and software projects. Get valuable feedback from the community, assign status labels, rate reviews, and earn points for unlocking badges and achievements. Improve your projects with collaborative insights." />
+        <meta name="keywords"
+          content="DevCritique, review platform, developers, websites, apps, software projects, feedback, collaborative insights, meta tags, badges, achievements" />
+        <meta property="og:title" content="DevCritique - Share and Review Projects for Developers" />
+        <meta property="og:description"
+          content="DevCritique is a platform to share and review websites, apps, and software projects. Get valuable feedback from the community, assign status labels, rate reviews, and earn points for unlocking badges and achievements. Improve your projects with collaborative insights." />
+        <meta property="og:image" content="https://devcritique.vercel.app/preview.png" />
+        <meta property="og:url" content="https://devcritique.vercel.app/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="DevCritique - Share and Review Projects for Developers" />
+        <meta name="twitter:description"
+          content="DevCritique is a platform to share and review websites, apps, and software projects. Get valuable feedback from the community, assign status labels, rate reviews, and earn points for unlocking badges and achievements. Improve your projects with collaborative insights." />
+        <meta name="twitter:image" content="https://devcritique.vercel.app/preview.png" />
+        <meta name="twitter:creator" content="@thenileshdarji" />
+      </Helmet>
 
       <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} user={user} />
       <ToastContainer
@@ -97,7 +127,7 @@ function App() {
       </Routes>
 
       <Footer />
-    </HelmetProvider>
+    </>
   )
 }
 
