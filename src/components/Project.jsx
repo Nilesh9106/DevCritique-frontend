@@ -1,21 +1,45 @@
 /* eslint-disable react/prop-types */
 import { Link, useNavigate } from 'react-router-dom';
+import { MdDelete } from 'react-icons/md'
 import User from './User';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
-function OpenGraphDetails({ description, link, author, _id, ogDetails }) {
+function OpenGraphDetails({ setLoading, description, link, author, _id, ogDetails }) {
     const navigate = useNavigate();
+    const deleteProject = async () => {
+        if (confirm("Are You sure to delete this Project?")) {
+            try {
+                setLoading(true);
+                let res = await axios.delete(`${import.meta.env.VITE_API_URL}/api/projects/${_id}`);
+                toast.success(res.data.message);
+                setLoading(false);
+                navigate('/');
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
+            }
 
+        }
+    }
 
     return (
-        // <button onClick={(e) => e.stopPropagation()} className='flex p-2 dark:hover:bg-neutral-800 hover:bg-neutral-200 rounded-full items-center text-xl hover:text-emerald-300 gap-1 mx-3'><FiShare className='transition-all  ' /></button>
         <>
             <div onClick={() => navigate(`/post/${_id}`)} className='p-4 cursor-pointer rounded max-sm:px-2 w-full border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
 
-                {/* <img src={author.profilePicture || '/user.png'} alt={author.name} className='sm:w-10 rounded-full sm:h-10 w-8 h-8 aspect-square' /> */}
-
                 <div className='px-2 max-sm:px-0 flex flex-col  gap-2'>
-                    <User author={author} />
+                    <div className='flex justify-between'>
+                        <User author={author} />
+                        {author.username == JSON.parse(localStorage.getItem("user")).username &&
+                            <button onClick={(e) => {
+                                e.stopPropagation();
+                                deleteProject();
+                            }} className='p-2 w-10 h-10 rounded-full hover:bg-neutral-900'>
+                                <MdDelete className='text-2xl ' />
+                            </button>
+                        }
+                    </div>
 
                     <p>{description}</p>
 

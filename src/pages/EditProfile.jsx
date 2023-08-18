@@ -51,7 +51,6 @@ export default function EditProfile({ user, updateUser }) {
                     userInfo.profilePicture = url;
                     setUserInfo({ ...userInfo });
                 }
-
             }).then(() => {
 
                 axios.put(`${import.meta.env.VITE_API_URL}/api/users/${user.username}`, userInfo).then((res) => {
@@ -72,7 +71,7 @@ export default function EditProfile({ user, updateUser }) {
                 // console.log(res.data);
                 if (res.data.user) {
                     updateUser();
-                    setLoading(false)
+                    setLoading(false);
                     toast.success("Profile updated")
                 }
             }).catch((err) => {
@@ -87,13 +86,18 @@ export default function EditProfile({ user, updateUser }) {
 
     return (
         <>
-            {loading && <Loading />}
+            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
             <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex flex-col justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-neutral-700  py-5 px-3  `}>
                 <h1 className="text-center text-2xl">Edit Profile</h1>
                 <div className="grid md:grid-cols-2 my-2 grid-cols-1 gap-2">
                     <div className="md:order-1 order-2 border dark:border-neutral-800 ">
                         {userInfo?.socialMediaLinks &&
                             <div className="flex flex-col px-2">
+                                <input value={userInfo.name || ""} onChange={(e) => {
+                                    userInfo.name = e.target.value;
+                                    setUserInfo({ ...userInfo })
+                                }} className="w-full px-3 py-1 my-3 rounded-md dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200" type="url" placeholder={`Name`} />
+
                                 {socialMedia.map((social, index) => {
                                     return <input key={index} value={userInfo.socialMediaLinks[social]} onChange={(e) => {
                                         userInfo.socialMediaLinks[social] = e.target.value;

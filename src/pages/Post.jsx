@@ -98,7 +98,7 @@ export default function Post({ updateUser }) {
           </Helmet>
 
           <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex justify-center items-center  py-3  `}>
-            {!loading && project.link && <Project {...project} />}
+            {!loading && project.link && <Project setLoading={setLoading} {...project} />}
           </div>
           <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex flex-col justify-center  py-3  `}>
             <div>

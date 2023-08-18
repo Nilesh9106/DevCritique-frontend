@@ -2,7 +2,7 @@
 import Project from './Project'
 
 
-export default function Projects({ projects }) {
+export default function Projects({ projects, setLoading }) {
 
 
     return (
@@ -13,7 +13,7 @@ export default function Projects({ projects }) {
                     :
                     projects.map((project, index) => {
                         // console.log(project);
-                        return <Project key={index} {...project} />
+                        return <Project setLoading={setLoading} key={index} {...project} />
                     })}
             </div>
         </>

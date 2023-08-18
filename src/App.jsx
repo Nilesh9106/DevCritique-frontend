@@ -14,6 +14,8 @@ import EditProfile from "./pages/EditProfile"
 import axios from "axios"
 import Footer from "./components/Footer"
 
+// const UserContext = createContext()
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({})
@@ -65,7 +67,6 @@ function App() {
   return (
 
     <>
-
       <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} user={user} />
       <ToastContainer
         position="top-right"

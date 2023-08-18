@@ -104,8 +104,8 @@ export default function Profile({ user }) {
                     }}>Reviews</li>
                 </ul>
                 <div className='mx-auto max-sm:pb-20 lg:w-2/3 sm:w-3/4 w-[95%] flex dark:bg-neutral-900 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700   p-3  items-center'>
-                    {tabName === 'Project' && <Projects projects={projects} />}
-                    {tabName === 'Review' && <Reviews reviews={reviews} />}
+                    {tabName === 'Project' && <Projects setLoading={setLoading} projects={projects} />}
+                    {tabName === 'Review' && <Reviews setLoading={setLoading} reviews={reviews} />}
                 </div>
             </>
             }
