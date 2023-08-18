@@ -31,9 +31,10 @@ export default function Home() {
     return (
         <>
 
-            {loading && <Loading />}
+
             <div className="dark:bg-neutral-900 rounded border dark:border-neutral-800 lg:max-w-4xl md:max-w-2xl sm:max-w-xl max-w-md max-sm:px-2 my-2 mx-auto">
                 <h1 className="text-3xl border-b dark:border-neutral-800 p-3">Home</h1>
+                {loading && <Loading />}
                 {projects.map((project, index) => {
                     // console.log(project);
                     return <Project key={index} {...project} />

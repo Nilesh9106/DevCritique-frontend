@@ -33,7 +33,8 @@ export default function Login({ setIsAuthenticated }) {
     }
     return (
         <>
-            {loading && <Loading />}
+            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
+
             <div className='max-w-2xl max-md:mx-10 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>
                 <h1 className="text-center text-4xl my-2">Login</h1>
                 <form className="flex flex-col  justify-center" onSubmit={(e) => loginUser(e)}>
@@ -49,6 +50,7 @@ export default function Login({ setIsAuthenticated }) {
                     <p className="text-sm">Do not have an account? <Link to={'/signup'} className="underline text-violet-400">SignUp</Link></p>
                 </form>
             </div>
+
 
         </>
     )

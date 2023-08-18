@@ -10,7 +10,7 @@ function OpenGraphDetails({ description, link, author, _id, ogDetails }) {
     return (
         // <button onClick={(e) => e.stopPropagation()} className='flex p-2 dark:hover:bg-neutral-800 hover:bg-neutral-200 rounded-full items-center text-xl hover:text-emerald-300 gap-1 mx-3'><FiShare className='transition-all  ' /></button>
         <>
-            <div onClick={() => navigate(`/post/${_id}`)} className='p-4 cursor-pointer rounded max-sm:px-2  border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
+            <div onClick={() => navigate(`/post/${_id}`)} className='p-4 cursor-pointer rounded max-sm:px-2 w-full border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
 
                 {/* <img src={author.profilePicture || '/user.png'} alt={author.name} className='sm:w-10 rounded-full sm:h-10 w-8 h-8 aspect-square' /> */}
 

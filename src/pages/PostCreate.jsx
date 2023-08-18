@@ -42,7 +42,7 @@ export default function PostCreate({ isAuthenticated, user }) {
 
     return (
         <>
-            {loading && <Loading />}
+            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
             <div className='max-w-2xl max-md:mx-5 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>
                 <h1 className='text-3xl '>Post Project</h1>
                 <form onSubmit={handleSubmit}>
