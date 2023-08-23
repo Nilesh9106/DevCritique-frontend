@@ -43,7 +43,10 @@ export default function Home() {
                 {loading && <Loading />}
                 {projects.map((project, index) => {
                     // console.log(project);
-                    return <Project key={index} {...project} />
+                    return <Project key={index} removeProject={() => {
+                        projects.splice(index, 1)
+                        setProjects(projects);
+                    }} setLoading={setLoading} {...project} />
                 })}
             </div>
         </>

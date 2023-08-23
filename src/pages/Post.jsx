@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Project from "../components/Project";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -11,7 +11,8 @@ import { Helmet } from "react-helmet";
 
 export default function Post({ updateUser }) {
   const { id } = useParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const [review, setReview] = useState({});
   const [project, setProject] = useState({});
   const [reviews, setReviews] = useState([]);
@@ -34,8 +35,9 @@ export default function Post({ updateUser }) {
       setLoading(false)
     } catch (error) {
       // Handle error if the request fails
-      console.error('Error fetching projects:', error.response.data.message);
+      console.error('Error fetching projects:', error);
       setLoading(false)
+      navigate('/notfound')
       return null;
     }
   }
@@ -98,7 +100,9 @@ export default function Post({ updateUser }) {
           </Helmet>
 
           <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex justify-center items-center  py-3  `}>
-            {!loading && project.link && <Project setLoading={setLoading} {...project} />}
+            {!loading && project.link && <Project removeProject={() => {
+              navigate('/');
+            }} setLoading={setLoading} {...project} />}
           </div>
           <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex flex-col justify-center  py-3  `}>
             <div>

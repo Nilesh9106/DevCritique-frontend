@@ -63,7 +63,7 @@ export default function Profile({ user }) {
                 <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700  py-5 px-3  `}>
                     <div className="flex gap-5 flex-wrap justify-center items-center ">
                         <div className="img">
-                            <img src={userInfo.profilePicture || '/user.png'} alt={userInfo.username} className="rounded-full sm:w-40 w-24 aspect-square" />
+                            <img src={userInfo.profilePicture || '/user.png'} alt={userInfo.username} className="rounded-full select-none sm:w-40 w-24 aspect-square" />
                         </div>
                         <div className="flex flex-col sm:mx-10 justify-center">
                             <div className="flex sm:gap-5 gap-3 items-center my-2">
@@ -104,7 +104,7 @@ export default function Profile({ user }) {
                     }}>Reviews</li>
                 </ul>
                 <div className='mx-auto max-sm:pb-20 lg:w-2/3 sm:w-3/4 w-[95%] flex dark:bg-neutral-900 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700   p-3  items-center'>
-                    {tabName === 'Project' && <Projects setLoading={setLoading} projects={projects} />}
+                    {tabName === 'Project' && <Projects setLoading={setLoading} setProjectList={setProjects} projects={projects} />}
                     {tabName === 'Review' && <Reviews setLoading={setLoading} reviews={reviews} />}
                 </div>
             </>
