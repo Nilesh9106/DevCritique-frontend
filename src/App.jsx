@@ -13,8 +13,9 @@ import PostCreate from "./pages/PostCreate"
 import EditProfile from "./pages/EditProfile"
 import axios from "axios"
 import Footer from "./components/Footer"
+import UserContext from "./MyContext"
+import Search from "./pages/Search"
 
-// const UserContext = createContext()
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,24 +29,21 @@ function App() {
     }
     axios.post(`${import.meta.env.VITE_API_URL}/api/checkToken`, { token: token }).then((res) => {
       if (res.data.status) {
-        localStorage.setItem('user', JSON.stringify(res.data.user))
         setUser(res.data.user)
-        // console.log(res.data.user);
       } else {
         localStorage.clear()
         setIsAuthenticated(false)
         setUser({})
         toast.error("something went wrong!!")
+        navigate("/")
       }
     }).catch((err) => {
       localStorage.clear()
       setIsAuthenticated(false)
       setUser({})
       console.log(err);
-      if (!err.data.response.status) {
-        toast.error("something went wrong!!")
-        navigate('/');
-      }
+      toast.error("something went wrong!!")
+      navigate('/');
     })
   }
 
@@ -62,12 +60,10 @@ function App() {
   }, [isAuthenticated])
 
 
-
-
   return (
 
-    <>
-      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} user={user} />
+    <UserContext.Provider value={{ user: user, updateUser: updateUser, isAuthenticated: isAuthenticated }}>
+      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -81,23 +77,24 @@ function App() {
         theme="colored"
       />
       <Routes>
-        <Route path="/" element={<Home user={user} />} />
+        <Route path="/" element={<Home />} />
         {!isAuthenticated && <>
           <Route path="/login" element={<Login isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/signup" element={<Signup isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
         </>}
 
-        <Route path="/post/create" element={<PostCreate isAuthenticated={isAuthenticated} user={user} />} />
-        <Route path="/post/:id" element={<Post updateUser={updateUser} />} />
-        <Route path="/editprofile" element={<EditProfile user={user} isAuthenticated={isAuthenticated} updateUser={updateUser} />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/post/create" element={<PostCreate />} />
+        <Route path="/post/:id" element={<Post />} />
+        <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/notfound" element={<NotFound />} />
-        <Route path="/:username" element={<Profile user={user} isAuthenticated={isAuthenticated} />} />
+        <Route path="/:username" element={<Profile />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />
-    </>
+    </UserContext.Provider>
   )
 }
 

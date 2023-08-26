@@ -1,17 +1,16 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CgProfile, CgSun } from 'react-icons/cg'
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiSearch } from 'react-icons/fi';
 import { PiMoonStarsDuotone } from 'react-icons/pi'
 import { Link } from 'react-router-dom';
+import UserContext from '../MyContext';
 
 
-export default function Navbar({ isAuthenticated, setIsAuthenticated, user }) {
+export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     const [dropDown, setDropDown] = useState(false);
-
-
-
+    const { user } = useContext(UserContext);
     useEffect(() => {
         if (localStorage.getItem('theme') === 'dark') {
             setIsDarkTheme(true);
@@ -32,14 +31,15 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, user }) {
     return (
         <>
             <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 z-40 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
-                <Link to={'/'} className="text-2xl flex gap-2 items-center">
-                    <img src="/icon2.png" className='h-10 aspect-square' alt="dev critique" />
+                <Link to={'/'} className="text-xl flex gap-2 items-center">
+                    <img src="/icon2.png" className='h-9 aspect-square' alt="dev critique" />
                     DEV CRITIQUE
                 </Link>
                 <div className='flex items-center'>
-                    <input type="text" placeholder='Search...' className='max-md:hidden rounded-md  mx-3 px-3 py-1 dark:bg-neutral-800 border dark:border-neutral-700 border-neutral-400  focus:ring-1 dark:focus:ring-neutral-800 focus:ring-neutral-500 outline-none w-64 focus:w-80 transition-all' />
+
+                    <Link to={'/search'} className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'><FiSearch className='text-2xl' /></Link>
                     <button onClick={() => { setIsDarkTheme(!isDarkTheme) }} className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'>{isDarkTheme ? <CgSun className='text-2xl' /> : <PiMoonStarsDuotone className='text-2xl' />}</button>
-                    <Link to={'/post/create'} className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'><FiPlus className='text-2xl' /></Link>
+
                     <button onClick={() => setDropDown(!dropDown)} className='p-2 rounded-full dark:hover:bg-neutral-800 hover:bg-white'><CgProfile className='text-2xl' /></button>
                 </div>
             </nav>
@@ -58,17 +58,16 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, user }) {
                     </div>}
 
                 {isAuthenticated && <ul className="p-2 flex flex-col ">
-                    <p className='text-lg px-3 py-2 '>{user.username}</p>
+                    <p className='text-lg px-3 py-2 '>{user?.username}</p>
                     <hr />
-                    <Link to={`/@${user.username}`} onClick={() => setDropDown(false)} className='px-3 py-2 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all '>Profile</Link>
+                    <Link to={'/post/create'} className='p-2 rounded-full flex gap-2 dark:hover:bg-neutral-800 hover:bg-white'><FiPlus className='text-2xl' />Post Project</Link>
+                    <Link to={`/@${user?.username}`} onClick={() => setDropDown(false)} className='px-3 py-2 flex gap-2 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all '><CgProfile className='text-2xl' /> Profile</Link>
                     <Link to={'/'} onClick={() => { setIsAuthenticated(false); localStorage.clear(); setDropDown(false) }} className='px-3 py-2 text-red-500 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all '>Logout</Link>
                 </ul>
                 }
 
             </div>
-            <div className='md:hidden w-full dark:bg-neutral-900/60 bg-neutral-100/60 p-3'>
-                <input type="text" placeholder='Search...' className=' rounded-md w-full px-3 py-1 dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200' />
-            </div>
+
 
         </>
     )

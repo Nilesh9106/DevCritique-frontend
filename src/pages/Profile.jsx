@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Projects from "../components/Projects";
 import Reviews from "../components/Reviews";
@@ -9,8 +9,10 @@ import { BiWorld } from "react-icons/bi"
 import axios from "axios";
 import Loading from "../components/Loading";
 import { Helmet } from "react-helmet";
+import UserContext from "../MyContext";
 
-export default function Profile({ user }) {
+export default function Profile() {
+    const { user } = useContext(UserContext);
     const { username } = useParams();
     const navigate = useNavigate();
     const [tabName, setTabName] = useState("Project");
@@ -27,7 +29,6 @@ export default function Profile({ user }) {
             setProjects(response.data.projects);
             setReviews(response.data.reviews);
             setUser(response.data.user);
-            // console.log(response.data);
             setLoading(false)
         } catch (error) {
             // Handle error if the request fails

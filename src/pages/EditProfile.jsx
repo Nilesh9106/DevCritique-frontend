@@ -1,20 +1,23 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
+import UserContext from "../MyContext";
 
-export default function EditProfile({ user, updateUser }) {
+export default function EditProfile() {
     const [userInfo, setUserInfo] = useState({})
+    const { user, updateUser } = useContext(UserContext);
     const [loading, setLoading] = useState(false)
     const [file, setFile] = useState(null)
     const navigate = useNavigate();
     const socialMedia = ['twitter', 'instagram', 'facebook', 'linkedin', 'github', 'website'];
 
-    useEffect(() => {
-        if (localStorage.getItem("token") && localStorage.getItem("token") != 'undefined') {
-            // console.log(user);
+    const check = async () => {
+        setLoading(true);
+        await updateUser();
+        if (localStorage.getItem("token") && localStorage.getItem("token") != 'undefined' && user._id) {
             setUserInfo({
                 ...user, socialMediaLinks: {
                     twitter: user.socialMediaLinks?.twitter || '',
@@ -29,7 +32,11 @@ export default function EditProfile({ user, updateUser }) {
         } else {
             navigate('/');
         }
-    }, [user])
+        setLoading(false);
+    }
+    useEffect(() => {
+        check();
+    }, [])
 
 
     const handleSubmit = async () => {
@@ -104,7 +111,6 @@ export default function EditProfile({ user, updateUser }) {
                                         setUserInfo({ ...userInfo })
                                     }} className="w-full px-3 py-1 my-3 rounded-md dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200" type="url" placeholder={`${social} Link`} />
                                 })}
-
                             </div>
                         }
                     </div>

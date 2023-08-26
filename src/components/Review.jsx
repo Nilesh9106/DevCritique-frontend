@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import axios from 'axios';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { PiStarFourFill } from 'react-icons/pi';
 import { SlClose, SlRefresh } from 'react-icons/sl';
 import User from './User';
@@ -10,14 +10,16 @@ import { useRef } from 'react';
 import { toast } from 'react-toastify';
 import Loading from "./Loading"
 import { Link } from 'react-router-dom';
+import UserContext from '../MyContext';
 
 
 const snapPoints = [-120, 0.5, 0];
 const initialSnap = 0;
 
 
-function Review({ _id, text, rating, status, author, project, comments, updateUser }) {
+function Review({ _id, text, rating, status, author, project, comments }) {
     // const navigate = useNavigate();
+    const { user } = useContext(UserContext);
     const [newStatus, setNewStatus] = useState(status);
     const [newRating, setNewRating] = useState(rating || '0');
     const [loadingUpdate, setLoadingUpdate] = useState(false);
@@ -33,25 +35,21 @@ function Review({ _id, text, rating, status, author, project, comments, updateUs
         if (Comment == "") {
             return;
         }
-        await updateUser();
-        if (localStorage.getItem("token")) {
+        if (localStorage.getItem("token") && user._id) {
             const obj = {
                 review: _id, comment: {
-                    username: JSON.parse(localStorage.getItem("user")).username,
+                    username: user.username,
                     text: Comment,
                 }
             }
-
             try {
                 const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/comments`, obj);
                 setCommentList(response.data.comments);
                 toast.success("comment added successfully!!");
-
             } catch (error) {
                 console.log(error);
                 toast.error("something went wrong!!");
             }
-
         } else {
             toast.warn("Please login to comment!!");
             return;
@@ -64,7 +62,7 @@ function Review({ _id, text, rating, status, author, project, comments, updateUs
             }
             setLoadingUpdate(true);
             await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating }, { headers: { 'Authorization': localStorage.getItem('token') } });
-            await updateUser();
+
             setLoadingUpdate(false);
             // console.log(res.data);
         } catch (error) {
@@ -82,7 +80,7 @@ function Review({ _id, text, rating, status, author, project, comments, updateUs
                         <User author={author} />
                         <div className='flex h-fit items-center gap-2'>
                             {
-                                project.author !== JSON.parse(localStorage.getItem('user'))?._id ?
+                                project.author !== user?._id ?
                                     <>
                                         <span className={`rounded-3xl  flex max-w-fit items-center  ${status == "pending" ? "bg-violet-400" : (status == "solved" ? "bg-green-400" : "bg-red-400")} capitalize text-black  py-0.5 px-3 gap-1  transition-all duration-300 shadow-lg`}>
                                             {status}
@@ -128,12 +126,12 @@ function Review({ _id, text, rating, status, author, project, comments, updateUs
                     </div>
                     <p className='max-sm:text-sm line-clamp-4'>{text}</p>
                     <div>
-                        <button onClick={() => setIsOpen(!isOpen)} className='flex gap-3 mt-2 px-3 py-1 rounded-xl items-center dark:hover:bg-neutral-800 hover:bg-neutral-200'><GoCommentDiscussion className='text-xl' /> <span>Discuss</span></button>
+                        <button onClick={() => setIsOpen(!isOpen)} className='flex gap-3 mt-2 px-3 py-1 rounded-xl items-center dark:hover:bg-neutral-800 hover:bg-neutral-200'><GoCommentDiscussion className='text-xl' /> <span>Discuss</span><span className='w-5 h-5 text-sm flex justify-center items-center bg-red-500 rounded-full '>{commentList.length}</span></button>
                     </div>
                 </div>
             </div>
             <Sheet ref={ref} snapPoints={snapPoints} initialSnap={initialSnap} isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <Sheet.Container style={{ backgroundColor: localStorage.getItem("theme") == "dark" ? "#121212" : "white" }}>
+                <Sheet.Container style={{ backgroundColor: localStorage.getItem("theme") == "dark" ? "#141414" : "white" }}>
                     <Sheet.Header >
                         {loadingComment && <Loading />}
                         <div className='flex flex-col relative py-2'>

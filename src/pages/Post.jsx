@@ -2,17 +2,18 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Project from "../components/Project";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Review from "../components/Review";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
+import UserContext from "../MyContext";
 
 
-export default function Post({ updateUser }) {
+export default function Post() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { user } = useContext(UserContext);
   const [review, setReview] = useState({});
   const [project, setProject] = useState({});
   const [reviews, setReviews] = useState([]);
@@ -25,12 +26,10 @@ export default function Post({ updateUser }) {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects/${id}`);
       setProject(response.data.project);
       setReviews(response.data.reviews);
-      // console.log(response.data, id);
-      // console.log(response.data);
       setReview({
         text: "",
         project: response.data.project._id,
-        author: localStorage.getItem('token') && JSON.parse(localStorage.getItem('user'))._id
+        author: localStorage.getItem('token') && user._id
       })
       setLoading(false)
     } catch (error) {
@@ -43,25 +42,20 @@ export default function Post({ updateUser }) {
   }
 
   const handleReview = async () => {
-    if (localStorage.getItem('token') == '' || !localStorage.getItem('token')) {
+    if (localStorage.getItem('token') == '' || !localStorage.getItem('token') || !user._id) {
       toast.error("Please login for reviewing project!!")
     }
-    console.log(review);
     setLoading(true);
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review, { headers: { 'Authorization': localStorage.getItem('token') } });
-      console.log(res.data);
-
+      console.log(res.status);
       getProject();
-
-      toast.success("you reviewed the project successfully!!")
-
+      toast.success("Thanks for reviewing project :)")
       setLoading(false)
     } catch (error) {
       // Handle error if the request fails
       console.error('Error uploading review:', error);
       setLoading(false)
-
     }
     setReview({
       ...review,
@@ -70,7 +64,7 @@ export default function Post({ updateUser }) {
   }
 
   useEffect(() => {
-    updateUser();
+
     getProject();
   }, [])
 
@@ -116,7 +110,7 @@ export default function Post({ updateUser }) {
               <p className="text-center text-violet-600 text-2xl block "> No review yet!!</p>
               :
               reviews.map((value, index) => {
-                return <Review key={index} updateUser={updateUser} {...value} />
+                return <Review key={index} {...value} />
               })
             }
           </div>

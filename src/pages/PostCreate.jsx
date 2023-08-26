@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
+import UserContext from "../MyContext";
 
-export default function PostCreate({ isAuthenticated, user }) {
+export default function PostCreate() {
     const [input, setInput] = useState("")
+    const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(false)
     const [project, setProject] = useState({
         link: "",
@@ -26,13 +28,15 @@ export default function PostCreate({ isAuthenticated, user }) {
             navigate(`/post/${res.data._id}`);
             setLoading(false);
         }).catch((err) => {
-            toast.error(err.response.data.message);
+            // toast.error(err);
+            console.log(err);
             setLoading(false);
+            navigate("/");
         });
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!localStorage.getItem("token") || !user._id) {
             toast.warning("Please Login to Post Project");
             navigate('/login');
         } else {
@@ -72,6 +76,10 @@ export default function PostCreate({ isAuthenticated, user }) {
                             e.preventDefault();
                             let val = input.trim()
                             if (val) {
+                                if (project.technologies.length >= 6) {
+                                    toast.warn("you can add maximum 6 technologies!!");
+                                    return;
+                                }
                                 setProject({ ...project, technologies: [...project.technologies, val] });
                             }
                             setInput('');

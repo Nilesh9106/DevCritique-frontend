@@ -19,7 +19,8 @@ export default function Home() {
             // console.log(response.data);
         } catch (error) {
             // Handle error if the request fails
-            console.error('Error fetching projects:', error.message);
+            console.error('Error fetching projects:', error);
+            setLoading(false);
             return null;
         }
         setLoading(false);
