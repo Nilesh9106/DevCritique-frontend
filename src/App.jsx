@@ -15,6 +15,7 @@ import axios from "axios"
 import Footer from "./components/Footer"
 import UserContext from "./MyContext"
 import Search from "./pages/Search"
+import Technologies from "./pages/technologies"
 
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
         <Route path="/post/:id" element={<Post />} />
         <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/notfound" element={<NotFound />} />
+        <Route path="/technologies/:technology" element={<Technologies />} />
         <Route path="/:username" element={<Profile />} />
 
         <Route path="*" element={<NotFound />} />

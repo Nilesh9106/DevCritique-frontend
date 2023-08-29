@@ -14,11 +14,9 @@ export default function Login({ setIsAuthenticated }) {
         e.preventDefault();
         setLoading(true)
         axios.post(`${import.meta.env.VITE_API_URL}/api/sign-in`, userInfo).then((res) => {
-            console.log(res.data);
             if (res.data.status) {
                 localStorage.clear();
                 localStorage.setItem('token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.user));
                 toast.success(res.data.message);
                 setIsAuthenticated(true);
                 navigate('/');

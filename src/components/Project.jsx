@@ -48,6 +48,7 @@ function OpenGraphDetails({ removeProject, setLoading, description, link, author
                         {technologies.map((data, index) => {
                             return <span onClick={(e) => {
                                 e.stopPropagation();
+                                navigate(`/technologies/${data}`)
                             }} key={index} className='rounded-3xl  flex max-w-fit items-center bg-violet-300 hover:scale-95 text-black py-0.5 my-1 px-3  gap-1  transition-all duration-300 shadow-lg'>
                                 {data}
                             </span>

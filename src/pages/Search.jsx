@@ -19,7 +19,7 @@ function Search() {
     return (
         <>
             <div className='w-full  dark:bg-neutral-900/60 bg-neutral-100/60 p-3 flex justify-center'>
-                <input type="text" onChange={search} placeholder='Search...' className=' rounded-md sm:w-[60%] w-full px-3 py-1 dark:bg-neutral-800 outline-none  transition-all border-none focus:ring-2 focus:ring-neutral-700' />
+                <input type="text" onChange={search} placeholder='Search...' className=' rounded-md sm:w-[60%] w-full px-3 py-1 dark:bg-neutral-800 bg-neutral-200 outline-none  transition-all border-none focus:ring-2 focus:ring-neutral-700' />
             </div>
             {projects.length == 0 && <p className="text-3xl text-violet-600 text-center m-3">No Project Found</p>}
             {loading && <Loading />}
