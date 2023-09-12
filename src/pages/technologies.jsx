@@ -17,8 +17,6 @@ function Technologies() {
         `${import.meta.env.VITE_API_URL}/api/search/technology/${technology}`
       );
       setProjects(response.data);
-      console.log(response.data);
-      console.log("Hello");
       setLoading(false);
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -35,11 +33,6 @@ function Technologies() {
       <div className="w-full dark:bg-neutral-900/60 bg-neutral-100/60 p-3 flex justify-center text-4xl">
         for tag {technology}
       </div>
-      {projects.length == 0 && (
-        <p className="text-3xl text-violet-600 text-center m-3">
-          No Project Found
-        </p>
-      )}
       {loading && <Loading />}
       {!loading && (
         <div className="dark:bg-neutral-900 rounded border dark:border-neutral-800 lg:max-w-4xl md:max-w-2xl sm:max-w-xl max-w-md max-sm:px-2 my-2 mx-auto">

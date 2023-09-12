@@ -67,9 +67,8 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
         </div>
       </nav>
       <div
-        className={` ${
-          dropDown ? "scale-100 " : "scale-0"
-        } transition-all fixed top-10 right-7 z-10 mt-10 w-80 origin-top-right rounded-md border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 dark:text-gray-100 shadow-lg`}
+        className={` ${dropDown ? "scale-100 " : "scale-0"
+          } transition-all fixed top-10 right-7 z-10 mt-10 w-80 origin-top-right rounded-md border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 dark:text-gray-100 shadow-lg`}
       >
         {!isAuthenticated && (
           <div className="p-2">
@@ -104,6 +103,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
             <hr />
             <Link
               to={"/post/create"}
+              onClick={() => setDropDown(false)}
               className="p-2 rounded-full flex gap-2 dark:hover:bg-neutral-800 hover:bg-white"
             >
               <FiPlus className="text-2xl" />
@@ -111,6 +111,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
             </Link>
             <Link
               to={`/@${user?.username}`}
+              onClick={() => setDropDown(false)}
               className="p-2 rounded-full flex gap-2 dark:hover:bg-neutral-800 hover:bg-white"
             >
               <CgProfile className="text-2xl" /> Profile

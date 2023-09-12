@@ -72,7 +72,7 @@ export default function PostCreate() {
                         </span>
                     })}</div>
                     <input type="text" placeholder="Add technologies separated by , (comma) " onKeyDown={(e) => {
-                        if (e.key == 'Enter' || e.key == ',') {
+                        if (e.key == 'Enter' || e.keyCode == 188) {
                             e.preventDefault();
                             let val = input.trim()
                             if (val) {
