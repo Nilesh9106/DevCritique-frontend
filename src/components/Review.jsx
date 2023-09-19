@@ -11,17 +11,18 @@ import { toast } from 'react-toastify';
 import Loading from "./Loading"
 import { Link } from 'react-router-dom';
 import UserContext from '../MyContext';
+import { MdDelete } from 'react-icons/md';
 
 
 const snapPoints = [-120, 0.5, 0];
 const initialSnap = 0;
 
 
-function Review({ _id, text, rating, status, author, project, comments }) {
+function Review({ _id, text, rating, status, author, project, comments, onDelete }) {
     // const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [newStatus, setNewStatus] = useState(status);
-    const [newRating, setNewRating] = useState(rating || '0');
+    const [newRating, setNewRating] = useState(rating || 'null');
     const [loadingUpdate, setLoadingUpdate] = useState(false);
     const [commentList, setCommentList] = useState(comments);
     const [loadingComment, setLoadingComment] = useState(false);
@@ -31,6 +32,7 @@ function Review({ _id, text, rating, status, author, project, comments }) {
 
 
     // console.log(comments);
+    // console.log(newRating, newStatus, rating, status);
     const doComment = async () => {
         if (Comment == "") {
             return;
@@ -71,22 +73,35 @@ function Review({ _id, text, rating, status, author, project, comments }) {
         }
     }
 
+    const deleteReview = () => {
+        if (confirm("Are you sure to delete this review?")) {
+            try {
+                axios.delete(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { headers: { 'Authorization': localStorage.getItem('token') } });
+                toast.success("Review deleted successfully!!");
+                onDelete();
+            } catch (error) {
+                console.log(error);
+                toast.error("something went wrong!!");
+            }
+        }
+    }
+
     return (
         <>
             <div className='p-4 cursor-pointer w-full my-2 rounded max-sm:px-2  border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
 
                 <div className='px-2 max-sm:px-0 flex w-full flex-col  gap-1'>
-                    <div className='flex justify-between items-center gap-2 w-full'>
+                    <div className='flex justify-between flex-wrap items-center gap-2 w-full'>
                         <User author={author} />
                         <div className='flex h-fit items-center gap-2'>
                             {
                                 project.author !== user?._id ?
                                     <>
-                                        <span className={`rounded-3xl  flex max-w-fit items-center  ${status == "pending" ? "bg-violet-400" : (status == "solved" ? "bg-green-400" : "bg-red-400")} capitalize text-black  py-0.5 px-3 gap-1  transition-all duration-300 shadow-lg`}>
+                                        <span className={`rounded-3xl  flex max-w-fit items-center  ${status == "pending" ? "bg-violet-400" : (status == "solved" ? "bg-green-400" : "bg-red-400")} capitalize text-black  py-0.5 px-3 gap-1  transition-all duration-300 shadow-lg max-sm:text-sm`}>
                                             {status}
                                         </span>
                                         {rating && rating != 0 &&
-                                            <span className={`rounded-3xl  flex max-w-fit items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-gray-700 py-0.5 px-3 gap-1  transition-all duration-300 shadow-lg`}>
+                                            <span className={`rounded-3xl  flex max-w-fit items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-gray-700 py-0.5 px-3 gap-1  transition-all duration-300 shadow-lg max-sm:text-sm`}>
                                                 {rating} <PiStarFourFill className='text-yellow-400 text-lg' />
                                             </span>
                                         }
@@ -95,7 +110,7 @@ function Review({ _id, text, rating, status, author, project, comments }) {
                                     <>
                                         <select value={newStatus} name="status" onChange={(e) => {
                                             setNewStatus(e.target.value);
-                                        }} className={`rounded-3xl flex items-center   ${newStatus == "pending" ? "bg-violet-400" : (newStatus == "solved" ? "bg-green-400" : "bg-red-400")} py-0.5 capitalize text-black   px-1   transition-all duration-300 shadow-lg`}  >
+                                        }} className={`rounded-3xl flex items-center   ${newStatus == "pending" ? "bg-violet-400" : (newStatus == "solved" ? "bg-green-400" : "bg-red-400")} py-0.5 capitalize text-black   px-1   transition-all max-sm:text-sm duration-300 shadow-lg`}  >
                                             <option value="pending">pending</option>
                                             <option value="solved">solved</option>
                                             <option value="rejected">rejected</option>
@@ -104,8 +119,8 @@ function Review({ _id, text, rating, status, author, project, comments }) {
                                             newStatus == 'solved' && (
                                                 <select value={newRating} name="status" onChange={(e) => {
                                                     setNewRating(e.target.value);
-                                                }} className={`rounded-3xl w-14 z-20 appearance-none dark:text-white text-black dark:bg-neutral-900 hover:bg-neutral-100   border border-gray-700 py-0.5 px-2 transition-all duration-300 shadow-lg`}  >
-                                                    <option value={'0'}>0</option>
+                                                }} className={`rounded-3xl w-14 z-20 appearance-none dark:text-white text-black dark:bg-neutral-900 hover:bg-neutral-100   border border-gray-700 py-0.5 px-2 transition-all duration-300 shadow-lg max-sm:text-sm`}  >
+                                                    <option value={'null'}>0</option>
                                                     <option value={'1'}>1</option>
                                                     <option value={'2'}>2</option>
                                                     <option value={'3'}>3</option>
@@ -114,20 +129,22 @@ function Review({ _id, text, rating, status, author, project, comments }) {
                                                 </select>
                                             )
                                         }
-                                        {(newRating != rating || newStatus != status) &&
+                                        {(newRating != `${rating}` || newStatus != status) &&
                                             <>
-                                                <button onClick={handleUpdate} className={`rounded-full  capitalize hover:bg-neutral-200 dark:hover:bg-neutral-900  p-2 aspect-square transition-all duration-300 shadow-lg`}><SlRefresh className='text-xl font-bold' /></button>
+                                                <button onClick={handleUpdate} className={`rounded-full  capitalize hover:bg-neutral-200 dark:hover:bg-neutral-900  p-2 aspect-square transition-all duration-300 shadow-lg`}><SlRefresh className='text-xl max-sm:text-base font-bold' /></button>
                                                 {loadingUpdate && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>}
                                             </>
                                         }
                                     </>
                             }
+                            {user?._id == author._id &&
+                                <button onClick={deleteReview} className={`rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-900  p-2 aspect-square transition-all duration-300 shadow-lg `}><MdDelete className='text-xl max-sm:text-base font-bold' /></button>
+                            }
                         </div>
                     </div>
-                    <p className='max-sm:text-sm line-clamp-4'>{text}</p>
-                    <div>
-                        <button onClick={() => setIsOpen(!isOpen)} className='flex gap-3 mt-2 px-3 py-1 rounded-xl items-center dark:hover:bg-neutral-800 hover:bg-neutral-200'><GoCommentDiscussion className='text-xl' /> <span>Discuss</span><span className='w-5 h-5 text-sm flex justify-center items-center bg-red-500 rounded-full '>{commentList.length}</span></button>
-                    </div>
+                    <p className='max-sm:text-sm px-2'>{text}</p>
+
+                    <button onClick={() => setIsOpen(!isOpen)} className='flex gap-3 mt-2 px-3 py-1 rounded-xl items-center dark:hover:bg-neutral-800 hover:bg-neutral-200'><GoCommentDiscussion className='text-xl' /> <span>Discuss</span><span className='w-5 h-5 text-sm flex justify-center items-center bg-red-500 rounded-full '>{commentList.length}</span></button>
                 </div>
             </div>
             <Sheet ref={ref} snapPoints={snapPoints} initialSnap={initialSnap} isOpen={isOpen} onClose={() => setIsOpen(false)} >
@@ -154,11 +171,14 @@ function Review({ _id, text, rating, status, author, project, comments }) {
                     <Sheet.Content style={{ paddingBottom: ref.current?.y }} >
                         <Sheet.Scroller>
                             <div className='sm:w-2/3 w-full max-sm:px-3 flex flex-col gap-4 mx-auto'>
-                                {commentList.map((comment, index) => {
-                                    return <div key={index}>
-                                        {CommentBox(comment)}
-                                    </div>;
-                                })}
+                                {
+                                    commentList.length == 0 ?
+                                        <p className="text-center text-violet-600 text-2xl block "> No comment yet!!</p>
+                                        :
+                                        commentList.map((value, index) => {
+                                            return <CommentBox key={index} {...value} />
+                                        })
+                                }
                             </div>
                         </Sheet.Scroller>
                     </Sheet.Content>

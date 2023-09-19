@@ -9,7 +9,7 @@ import UserContext from "../MyContext";
 export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [dropDown, setDropDown] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, updateUser } = useContext(UserContext);
   useEffect(() => {
     if (localStorage.getItem("theme") === "dark") {
       setIsDarkTheme(true);
@@ -118,9 +118,10 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
             </Link>
             <Link
               to={"/"}
-              onClick={() => {
-                setIsAuthenticated(false);
+              onClick={async () => {
                 localStorage.clear();
+                setIsAuthenticated(false);
+                await updateUser();
                 setDropDown(false);
               }}
               className="px-3 py-2 text-red-500 rounded-md dark:hover:bg-neutral-800 hover:bg-neutral-50 transition-all "

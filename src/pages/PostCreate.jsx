@@ -6,10 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import UserContext from "../MyContext";
+import { Helmet } from "react-helmet";
 
 export default function PostCreate() {
     const [input, setInput] = useState("")
-    const { user } = useContext(UserContext);
+    const { user, isAuthenticated } = useContext(UserContext);
     const [loading, setLoading] = useState(false)
     const [project, setProject] = useState({
         link: "",
@@ -36,7 +37,7 @@ export default function PostCreate() {
     }
 
     useEffect(() => {
-        if (!localStorage.getItem("token") || !user._id) {
+        if (isAuthenticated == false) {
             toast.warning("Please Login to Post Project");
             navigate('/login');
         } else {
@@ -46,6 +47,9 @@ export default function PostCreate() {
 
     return (
         <>
+            <Helmet>
+                <title>Devcritique | Create Post</title>
+            </Helmet>
             {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
             <div className='max-w-2xl max-md:mx-5 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>
                 <h1 className='text-3xl '>Post Project</h1>

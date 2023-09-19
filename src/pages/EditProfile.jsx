@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import UserContext from "../MyContext";
+import { Helmet } from "react-helmet";
 
 export default function EditProfile() {
     const [userInfo, setUserInfo] = useState({})
-    const { user, updateUser } = useContext(UserContext);
+    const { user, updateUser, isAuthenticated } = useContext(UserContext);
     const [loading, setLoading] = useState(false)
     const [file, setFile] = useState(null)
     const navigate = useNavigate();
@@ -16,8 +17,7 @@ export default function EditProfile() {
 
     const check = async () => {
         setLoading(true);
-        await updateUser();
-        if (localStorage.getItem("token") && localStorage.getItem("token") != 'undefined' && user._id) {
+        if (isAuthenticated) {
             setUserInfo({
                 ...user, socialMediaLinks: {
                     twitter: user.socialMediaLinks?.twitter || '',
@@ -29,10 +29,12 @@ export default function EditProfile() {
                 },
                 profilePicture: (user.profilePicture != '' && user.profilePicture) || '/user.png'
             })
-        } else {
+            setLoading(false);
+        } else if (isAuthenticated === false) {
             navigate('/');
+            toast.error("Please, login to edit profile");
+            setLoading(false);
         }
-        setLoading(false);
     }
     useEffect(() => {
         check();
@@ -93,6 +95,9 @@ export default function EditProfile() {
 
     return (
         <>
+            <Helmet>
+                <title>Devcritique | Edit Profile</title>
+            </Helmet>
             {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
             <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex flex-col justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-neutral-700  py-5 px-3  `}>
                 <h1 className="text-center text-2xl">Edit Profile</h1>

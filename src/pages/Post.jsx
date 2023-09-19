@@ -64,7 +64,6 @@ export default function Post() {
   }
 
   useEffect(() => {
-
     getProject();
   }, [])
 
@@ -96,7 +95,7 @@ export default function Post() {
           <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex justify-center items-center  py-3  `}>
             {!loading && project.link && <Project removeProject={() => {
               navigate('/');
-            }} setLoading={setLoading} {...project} />}
+            }} setLoading={setLoading} {...project} detail={true} />}
           </div>
           <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex flex-col justify-center  py-3  `}>
             <div>
@@ -110,7 +109,10 @@ export default function Post() {
               <p className="text-center text-violet-600 text-2xl block "> No review yet!!</p>
               :
               reviews.map((value, index) => {
-                return <Review key={index} {...value} />
+                return <Review key={index} {...value} onDelete={() => {
+                  reviews.splice(index, 1);
+                  setReviews([...reviews]);
+                }} />
               })
             }
           </div>

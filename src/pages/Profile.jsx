@@ -51,11 +51,11 @@ export default function Profile() {
         <>
 
             <Helmet>
-                <title>{userInfo?.username}</title>
-                <meta property="og:title" content={userInfo?.username || "Dev Critique"} />
-                {userInfo?.profilePicture && <meta property="og:image" content={userInfo.profilePicture} />}
+                <title>{userInfo?.name || userInfo?.username}</title>
+                <meta property="og:title" content={userInfo?.name || userInfo?.username} />
+                {userInfo?.profilePicture && <meta property="og:image" content={userInfo?.profilePicture} />}
                 <meta property="og:url" content={window.location.href} />
-                <meta name="twitter:title" content={userInfo.username || "Dev Critique"} />
+                <meta name="twitter:title" content={userInfo?.name || userInfo?.username} />
                 {userInfo?.profilePicture && <meta name="twitter:image" content={userInfo?.profilePicture} />}
                 <meta name="twitter:card" content="summary_large_image" />
             </Helmet>
@@ -106,7 +106,7 @@ export default function Profile() {
                 </ul>
                 <div className='mx-auto max-sm:pb-20 lg:w-2/3 sm:w-3/4 w-[95%] flex dark:bg-neutral-900 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700   p-3  items-center'>
                     {tabName === 'Project' && <Projects setLoading={setLoading} setProjectList={setProjects} projects={projects} />}
-                    {tabName === 'Review' && <Reviews setLoading={setLoading} reviews={reviews} />}
+                    {tabName === 'Review' && <Reviews setLoading={setLoading} reviews={reviews} setReviews={setReviews} />}
                 </div>
             </>
             }

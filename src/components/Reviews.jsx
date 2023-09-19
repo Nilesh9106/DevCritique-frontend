@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Review from "./Review"
 
-export default function Reviews({ reviews }) {
+export default function Reviews({ reviews, setReviews }) {
     return (
         <div className='w-full flex flex-col gap-2'>
             {reviews.length == 0 ?
@@ -9,7 +9,10 @@ export default function Reviews({ reviews }) {
                 :
                 reviews.map((review, index) => {
                     // console.log(project);
-                    return <Review key={index} {...review} />
+                    return <Review key={index} {...review} onDelete={() => {
+                        reviews.splice(index, 1);
+                        setReviews([...reviews]);
+                    }} />
                 })}
         </div>
     )

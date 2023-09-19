@@ -3,6 +3,7 @@ import { useState } from "react";
 import Project from "../components/Project"
 import Loading from "../components/Loading";
 import { CgSearch } from "react-icons/cg";
+import { Helmet } from "react-helmet";
 
 
 function Search() {
@@ -10,7 +11,6 @@ function Search() {
     const [loading, setLoading] = useState(false);
     const [query, setQuery] = useState("")
     const search = async () => {
-
         if (query == "") return;
         setLoading(true);
         let res = await axios.get(`${import.meta.env.VITE_API_URL}/api/search/description/${query}`);
@@ -19,6 +19,9 @@ function Search() {
     }
     return (
         <>
+            <Helmet>
+                <title>Devcritique | Search</title>
+            </Helmet>
             <div className='w-full  dark:bg-neutral-900/60 bg-neutral-100/60 p-3 flex justify-center'>
                 <input type="text" onKeyDown={(e) => {
                     // console.log(e.key);

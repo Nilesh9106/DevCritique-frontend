@@ -16,21 +16,25 @@ import Footer from "./components/Footer"
 import UserContext from "./MyContext"
 import Search from "./pages/Search"
 import Technologies from "./pages/technologies"
+import Loading from "./components/Loading"
 
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [user, setUser] = useState({})
   const navigate = useNavigate();
 
   const updateUser = () => {
     const token = (localStorage.getItem('token'));
     if (!token) {
+      setUser({});
+      setIsAuthenticated(false);
       return;
     }
     axios.post(`${import.meta.env.VITE_API_URL}/api/checkToken`, { token: token }).then((res) => {
       if (res.data.status) {
         setUser(res.data.user)
+        setIsAuthenticated(true);
       } else {
         localStorage.clear()
         setIsAuthenticated(false)
@@ -49,16 +53,8 @@ function App() {
   }
 
   useEffect(() => {
-    if (!localStorage.getItem("token") || localStorage.getItem("token") == 'undefined') {
-      localStorage.clear()
-      setIsAuthenticated(false)
-      setUser({})
-    } else {
-      setUser(JSON.parse(localStorage.getItem("user")))
-      setIsAuthenticated(true)
-    }
     updateUser();
-  }, [isAuthenticated])
+  }, [])
 
 
   return (
@@ -78,21 +74,23 @@ function App() {
         theme="colored"
       />
       <Routes>
-        <Route path="/" element={<Home />} />
-        {!isAuthenticated && <>
-          <Route path="/login" element={<Login isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/signup" element={<Signup isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
-        </>}
-
-        <Route path="/search" element={<Search />} />
-        <Route path="/post/create" element={<PostCreate />} />
-        <Route path="/post/:id" element={<Post />} />
-        <Route path="/editprofile" element={<EditProfile />} />
-        <Route path="/notfound" element={<NotFound />} />
-        <Route path="/technologies/:technology" element={<Technologies />} />
-        <Route path="/:username" element={<Profile />} />
-
-        <Route path="*" element={<NotFound />} />
+        {isAuthenticated === null ?
+          <Route path="*" element={<Loading className={'dark:bg-neutral-900 bg-neutral-100 h-[100vh] fixed top-0'} text={"initial Loading..."} />} />
+          :
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/signup" element={<Signup isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/post/create" element={<PostCreate />} />
+            <Route path="/post/:id" element={<Post />} />
+            <Route path="/editprofile" element={<EditProfile />} />
+            <Route path="/notfound" element={<NotFound />} />
+            <Route path="/technologies/:technology" element={<Technologies />} />
+            <Route path="/:username" element={<Profile />} />
+            <Route path="*" element={<NotFound />} />
+          </>
+        }
       </Routes>
 
       <Footer />

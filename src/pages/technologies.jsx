@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import Project from "../components/Project";
+import { Helmet } from "react-helmet";
 
 function Technologies() {
   const [projects, setProjects] = useState([]);
@@ -30,6 +31,9 @@ function Technologies() {
   }, []);
   return (
     <>
+      <Helmet>
+        <title>Projects built with {technology}</title>
+      </Helmet>
       <div className="w-full dark:bg-neutral-900/60 bg-neutral-100/60 p-3 flex justify-center text-4xl">
         for tag {technology}
       </div>

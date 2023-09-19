@@ -4,8 +4,10 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
+import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 
-export default function Login({ setIsAuthenticated }) {
+export default function Login({ isAuthenticated, setIsAuthenticated }) {
     const [userInfo, setUserInfo] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
@@ -29,8 +31,18 @@ export default function Login({ setIsAuthenticated }) {
             setLoading(false);
         });
     }
+    useEffect(() => {
+        if (isAuthenticated === true) {
+            toast.success('You are already logged in');
+            navigate('/')
+        }
+    }, [])
+
     return (
         <>
+            <Helmet>
+                <title>Devcritique | Login</title>
+            </Helmet>
             {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
 
             <div className='max-w-2xl max-md:mx-10 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>

@@ -8,7 +8,7 @@ import UserContext from '../MyContext';
 import { useContext } from 'react';
 
 
-function OpenGraphDetails({ removeProject, setLoading, description, link, author, _id, ogDetails, technologies }) {
+function OpenGraphDetails({ removeProject, setLoading, description, link, author, _id, ogDetails, technologies, detail }) {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const deleteProject = async () => {
@@ -43,7 +43,7 @@ function OpenGraphDetails({ removeProject, setLoading, description, link, author
                         }
                     </div>
 
-                    <p className='max-sm:text-sm line-clamp-4'>{description}</p>
+                    <p className={`max-sm:text-sm ${!detail ? "line-clamp-4" : ""}`}>{description}</p>
                     <div className='flex gap-2 flex-wrap'>
                         {technologies.map((data, index) => {
                             return <span onClick={(e) => {
