@@ -37,7 +37,7 @@ function Technologies() {
       <div className="w-full dark:bg-neutral-900/60 bg-neutral-100/60 p-3 flex justify-center text-4xl">
         for tag {technology}
       </div>
-      {loading && <Loading />}
+      {loading && <Loading text={`Fetching Project built using ${technology}`} />}
       {!loading && (
         <div className="dark:bg-neutral-900 rounded border dark:border-neutral-800 lg:max-w-4xl md:max-w-2xl sm:max-w-xl max-w-md max-sm:px-2 my-2 mx-auto">
           {projects.map((project, index) => {

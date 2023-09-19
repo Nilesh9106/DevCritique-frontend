@@ -10,9 +10,10 @@ import { Helmet } from "react-helmet";
 export default function Home() {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    const [loadingText, setLoadingText] = useState("");
     async function getProjects() {
         setLoading(true);
+        setLoadingText("Getting projects...");
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects`);
             setProjects(response.data);
@@ -24,6 +25,7 @@ export default function Home() {
             return null;
         }
         setLoading(false);
+        setLoadingText("");
     }
     useEffect(() => {
         getProjects();
@@ -41,7 +43,7 @@ export default function Home() {
             </Helmet>
             <div className="dark:bg-neutral-900 rounded border dark:border-neutral-800 lg:max-w-4xl md:max-w-2xl sm:max-w-xl max-w-md max-sm:px-2 my-2 mx-auto">
                 <h1 className="text-3xl border-b dark:border-neutral-800 p-3">Home</h1>
-                {loading && <Loading />}
+                {loading && <Loading text={loadingText} />}
                 {projects.map((project, index) => {
                     // console.log(project);
                     return <Project key={index} removeProject={() => {

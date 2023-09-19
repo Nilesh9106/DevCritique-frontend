@@ -32,7 +32,7 @@ function Search() {
                 <button onClick={search} className="p-2 mx-2 flex justify-center items-center rounded-full dark:hover:bg-neutral-800 hover:bg-white"><CgSearch className="text-2xl" /></button>
             </div>
             {projects.length == 0 && <p className="text-3xl text-violet-600 text-center m-3">No Project Found</p>}
-            {loading && <Loading />}
+            {loading && <Loading text={`Searching for ${query}...`} />}
             {!loading && <div className="dark:bg-neutral-900 rounded border dark:border-neutral-800 lg:max-w-4xl md:max-w-2xl sm:max-w-xl max-w-md max-sm:px-2 my-2 mx-auto">
                 {projects.map((project, index) => {
                     // project.author = project.author[0];

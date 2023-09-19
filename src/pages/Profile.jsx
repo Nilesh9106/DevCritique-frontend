@@ -17,6 +17,7 @@ export default function Profile() {
     const navigate = useNavigate();
     const [tabName, setTabName] = useState("Project");
     const [loading, setLoading] = useState(false)
+    const [loadingText, setLoadingText] = useState("");
     const [projects, setProjects] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [userInfo, setUser] = useState({})
@@ -24,6 +25,7 @@ export default function Profile() {
 
     async function getProjects() {
         setLoading(true)
+        setLoadingText("Getting user info...");
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/${username.slice(1).trim()}`);
             setProjects(response.data.projects);
@@ -37,6 +39,7 @@ export default function Profile() {
             setLoading(false)
             return null;
         }
+        setLoadingText("");
     }
 
     useEffect(() => {
@@ -59,7 +62,7 @@ export default function Profile() {
                 {userInfo?.profilePicture && <meta name="twitter:image" content={userInfo?.profilePicture} />}
                 <meta name="twitter:card" content="summary_large_image" />
             </Helmet>
-            {loading && <Loading />}
+            {loading && <Loading text={loadingText} />}
             {!loading && <>
                 <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700  py-5 px-3  `}>
                     <div className="flex gap-5 flex-wrap justify-center items-center ">

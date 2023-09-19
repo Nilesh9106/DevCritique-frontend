@@ -54,7 +54,8 @@ function App() {
 
   useEffect(() => {
     updateUser();
-  }, [])
+    // console.log("getting info");
+  }, [isAuthenticated])
 
 
   return (

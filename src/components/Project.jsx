@@ -8,9 +8,10 @@ import UserContext from '../MyContext';
 import { useContext } from 'react';
 
 
-function OpenGraphDetails({ removeProject, setLoading, description, link, author, _id, ogDetails, technologies, detail }) {
+function OpenGraphDetails({ removeProject, setLoading, description, link, author, _id, ogDetails, technologies, detail, createdAt }) {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
+    // console.log(createdAt);
     const deleteProject = async () => {
         if (confirm("Are You sure to delete this Project?")) {
             try {
@@ -32,7 +33,7 @@ function OpenGraphDetails({ removeProject, setLoading, description, link, author
 
                 <div className='px-2 max-sm:px-0 flex flex-col w-full  gap-2'>
                     <div className='flex justify-between'>
-                        <User author={author} />
+                        <User author={author} createdAt={createdAt} />
                         {user && author.username == user.username &&
                             <button onClick={(e) => {
                                 e.stopPropagation();

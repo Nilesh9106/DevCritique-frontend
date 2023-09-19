@@ -11,12 +11,14 @@ export default function EditProfile() {
     const [userInfo, setUserInfo] = useState({})
     const { user, updateUser, isAuthenticated } = useContext(UserContext);
     const [loading, setLoading] = useState(false)
+    const [loadingText, setLoadingText] = useState("");
     const [file, setFile] = useState(null)
     const navigate = useNavigate();
     const socialMedia = ['twitter', 'instagram', 'facebook', 'linkedin', 'github', 'website'];
 
     const check = async () => {
         setLoading(true);
+        setLoadingText("Getting user info");
         if (isAuthenticated) {
             setUserInfo({
                 ...user, socialMediaLinks: {
@@ -48,6 +50,7 @@ export default function EditProfile() {
             const formData = new FormData();
             formData.append('file', file);
             setLoading(true)
+            setLoadingText("Uploading profile picture");
             axios.post(`${import.meta.env.VITE_API_URL}/api/file/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -61,8 +64,8 @@ export default function EditProfile() {
                     setUserInfo({ ...userInfo });
                 }
             }).then(() => {
-
-                axios.put(`${import.meta.env.VITE_API_URL}/api/users/${user.username}`, userInfo).then((res) => {
+                setLoadingText("Updating profile");
+                axios.put(`${import.meta.env.VITE_API_URL}/api/users/${user.username}`, userInfo, { headers: { "Authorization": localStorage.getItem("token") } }).then((res) => {
                     // console.log(res.data);
                     if (res.data.user) {
                         updateUser();
@@ -76,8 +79,9 @@ export default function EditProfile() {
             })
         } else {
             setLoading(true)
-            axios.put(`${import.meta.env.VITE_API_URL}/api/users/${user.username}`, userInfo).then((res) => {
-                // console.log(res.data);
+            setLoadingText("Updating profile...");
+            axios.put(`${import.meta.env.VITE_API_URL}/api/users/${user.username}`, userInfo, { headers: { "Authorization": localStorage.getItem("token") } }).then((res) => {
+                console.log(res.data);
                 if (res.data.user) {
                     updateUser();
                     setLoading(false);
@@ -88,6 +92,7 @@ export default function EditProfile() {
                 setLoading(false)
             })
         }
+        // setLoadingText("");
     }
 
 
@@ -98,7 +103,7 @@ export default function EditProfile() {
             <Helmet>
                 <title>Devcritique | Edit Profile</title>
             </Helmet>
-            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
+            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} text={loadingText} />}
             <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex flex-col justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-neutral-700  py-5 px-3  `}>
                 <h1 className="text-center text-2xl">Edit Profile</h1>
                 <div className="grid md:grid-cols-2 my-2 grid-cols-1 gap-2">

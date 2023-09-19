@@ -43,7 +43,7 @@ export default function Login({ isAuthenticated, setIsAuthenticated }) {
             <Helmet>
                 <title>Devcritique | Login</title>
             </Helmet>
-            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} />}
+            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} text={"Signing you in..."} />}
 
             <div className='max-w-2xl max-md:mx-10 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>
                 <h1 className="text-center text-4xl my-2">Login</h1>

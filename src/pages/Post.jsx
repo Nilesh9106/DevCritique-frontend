@@ -18,10 +18,12 @@ export default function Post() {
   const [project, setProject] = useState({});
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("");
 
 
   async function getProject() {
     setLoading(true)
+    setLoadingText("Getting project details...");
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects/${id}`);
       setProject(response.data.project);
@@ -39,6 +41,7 @@ export default function Post() {
       navigate('/notfound')
       return null;
     }
+    setLoadingText("");
   }
 
   const handleReview = async () => {
@@ -46,6 +49,7 @@ export default function Post() {
       toast.error("Please login for reviewing project!!")
     }
     setLoading(true);
+    setLoadingText("Uploading review...");
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review, { headers: { 'Authorization': localStorage.getItem('token') } });
       console.log(res.status);
@@ -61,6 +65,7 @@ export default function Post() {
       ...review,
       text: "",
     })
+    setLoadingText("");
   }
 
   useEffect(() => {
@@ -70,7 +75,7 @@ export default function Post() {
   return (
     <>
       {loading && <div>
-        <Loading />
+        <Loading text={loadingText} />
       </div>}
       {!loading &&
         <>

@@ -18,7 +18,7 @@ const snapPoints = [-120, 0.5, 0];
 const initialSnap = 0;
 
 
-function Review({ _id, text, rating, status, author, project, comments, onDelete }) {
+function Review({ _id, text, rating, status, author, project, comments, onDelete, createdAt }) {
     // const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [newStatus, setNewStatus] = useState(status);
@@ -92,7 +92,7 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
 
                 <div className='px-2 max-sm:px-0 flex w-full flex-col  gap-1'>
                     <div className='flex justify-between flex-wrap items-center gap-2 w-full'>
-                        <User author={author} />
+                        <User author={author} createdAt={createdAt} />
                         <div className='flex h-fit items-center gap-2'>
                             {
                                 project.author !== user?._id ?
