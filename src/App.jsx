@@ -90,7 +90,7 @@ function App() {
             <Route path="/notfound" element={<NotFound />} />
             <Route path="/technologies/:technology" element={<Technologies />} />
             <Route path="/:username" element={<Profile />} />
-			<Route path="/reset-password/:UniqueString" element={<ResetPassword />} />
+            <Route path="/reset-password/:uniqueString" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </>
         }
