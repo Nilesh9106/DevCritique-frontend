@@ -58,7 +58,8 @@ export default function Login({ isAuthenticated, setIsAuthenticated }) {
 
                     <button type="submit" className="w-full px-3 py-1 my-3 text-neutral-200 rounded-md bg-violet-600 hover:bg-violet-500 transition-all duration-300" >Submit</button>
                     <p className="text-sm">Do not have an account? <Link to={'/signup'} className="underline text-violet-400">SignUp</Link></p>
-                </form>
+                    <p className="text-sm">Forgot your password? <Link to={'/forgot-password'} className="underline text-violet-400">Reset Password</Link></p>
+				</form>
             </div>
 
 

@@ -17,6 +17,8 @@ import UserContext from "./MyContext"
 import Search from "./pages/Search"
 import Technologies from "./pages/technologies"
 import Loading from "./components/Loading"
+import ResetPassword from "./pages/ResetPassword"
+import ForgotPassword from "./pages/ForgotPassword"
 
 
 function App() {
@@ -89,6 +91,8 @@ function App() {
             <Route path="/notfound" element={<NotFound />} />
             <Route path="/technologies/:technology" element={<Technologies />} />
             <Route path="/:username" element={<Profile />} />
+			<Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:uniqueString" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </>
         }
