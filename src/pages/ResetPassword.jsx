@@ -18,7 +18,7 @@ export default function ResetPassword() {
 		e.preventDefault();
 		setLoading(true)
 		if (password !== confirmPassword) {
-			toast.error("Passwords do not match")
+			toast.error("Passwords does not match")
 			setLoading(false)
 			return
 		}
@@ -29,7 +29,7 @@ export default function ResetPassword() {
 			navigate('/login')
 		}
 		else {
-			toast.error("Something went wrong")
+			toast.error(response.data.message)
 			setLoading(false)
 		}
 	}
