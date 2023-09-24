@@ -71,7 +71,7 @@ export default function PostCreate() {
                         </span>
                     })}</div>
                     <input type="text" placeholder="Add technologies separated by , (comma) " onKeyDown={(e) => {
-                        if (e.key == 'Enter' || e.keyCode == 188 || e.keyCode == 229) {
+                        if (e.key == 'Enter' || e.keyCode == 188) {
                             e.preventDefault();
                             let val = input.trim()
                             if (val) {
@@ -83,7 +83,22 @@ export default function PostCreate() {
                             }
                             setInput('');
                         }
-                    }} name="technologies" value={input} onChange={(e) => setInput(e.target.value)} className="w-full px-3 py-1 my-3 rounded-md dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200" />
+                    }} name="technologies" value={input} onChange={(e) => {
+                        setInput(e.target.value);
+                        if (e.target.value.charAt(e.target.value.length - 1) == ',') {
+                            let val = input.trim()
+                            if (val) {
+                                if (project.technologies.length >= 6) {
+                                    toast.warn("you can add maximum 6 technologies!!", {
+                                        toastId: "tech"
+                                    });
+                                    return;
+                                }
+                                setProject({ ...project, technologies: [...project.technologies, val] });
+                            }
+                            setInput('');
+                        }
+                    }} className="w-full px-3 py-1 my-3 rounded-md dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200" />
 
                     <button type="submit" className="w-full px-3 py-1 my-3 text-neutral-200 rounded-md bg-violet-600 hover:bg-violet-500 transition-all duration-300" >Submit</button>
                 </form>
