@@ -29,7 +29,7 @@ function OpenGraphDetails({ removeProject, setLoading, description, link, author
 
     return (
         <>
-            <div onClick={() => navigate(`/post/${_id}`)} className='p-4 cursor-pointer rounded max-sm:px-2 w-full border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
+            <div onClick={() => navigate(`/post/${_id}`)} className='p-4 dark:bg-neutral-900 bg-neutral-50 cursor-pointer m-2 rounded-xl max-sm:px-2 w-full border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/40 flex gap-2 transition-colors '>
 
                 <div className='px-2 max-sm:px-0 flex flex-col w-full  gap-2'>
                     <div className='flex justify-between'>
@@ -57,7 +57,7 @@ function OpenGraphDetails({ removeProject, setLoading, description, link, author
                     </div>
 
                     {ogDetails?.title ? (
-                        <Link to={link} target='_blank' onClick={(e) => { e.stopPropagation() }} className='flex gap-3 max-sm:flex-wrap items-center border w-full dark:border-neutral-800 rounded my-2 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800/50' rel="noreferrer">
+                        <Link to={link} target='_blank' onClick={(e) => { e.stopPropagation() }} className='flex gap-3 max-sm:flex-wrap items-center border w-full dark:border-neutral-800 rounded my-2 transition-colors p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800/50' rel="noreferrer">
                             {ogDetails.image && (
                                 <img src={ogDetails.image} alt={ogDetails.title} className="sm:h-32  max-sm:w-full rounded" />
                             )}

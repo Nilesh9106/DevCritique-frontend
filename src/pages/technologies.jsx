@@ -35,11 +35,11 @@ function Technologies() {
         <title>Projects built with {technology}</title>
       </Helmet>
       <div className="w-full dark:bg-neutral-900/60 bg-neutral-100/60 p-3 flex justify-center text-4xl">
-        for tag {technology}
+        Projects with tag `{technology}`
       </div>
       {loading && <Loading text={`Fetching Project built using ${technology}`} />}
       {!loading && (
-        <div className="dark:bg-neutral-900 rounded border dark:border-neutral-800 lg:max-w-4xl md:max-w-2xl sm:max-w-xl max-w-md max-sm:px-2 my-2 mx-auto">
+        <div className="mx-auto lg:w-[60%] px-2 sm:w-3/4 w-full flex flex-col justify-center items-center  pb-2">
           {projects.map((project, index) => {
             // project.author = project.author[0];
             return (

@@ -2,37 +2,36 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../components/Loading";
 import { Helmet } from "react-helmet";
 
 export default function Signup() {
     const [userInfo, setUserInfo] = useState({});
-    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
 
-    const signupUser = (e) => {
+    const signupUser = async (e) => {
         e.preventDefault();
-        setLoading(true)
-        axios.post(`${import.meta.env.VITE_API_URL}/api/sign-up`, userInfo).then((res) => {
-            console.log(res.data);
+        try {
+            let res = await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/sign-up`, userInfo), {
+                pending: 'Creating Account for you...',
+                success: "Account Created Successfully!! please verify your email",
+            });
             if (res.data.status) {
                 toast.success(res.data.message);
                 navigate('/login');
             } else {
                 toast.error(res.data.message);
             }
-            setLoading(false);
-        }).catch((err) => {
-            toast.error(err.response.data.message);
-            setLoading(false);
-        });
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+
+
     }
     return (
         <>
             <Helmet>
                 <title>Devcritique | Sign up</title>
             </Helmet>
-            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} text={"Creating Account for you"} />}
             <div className='max-w-2xl max-md:mx-10 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>
                 <h1 className="text-center text-4xl my-2">Signup</h1>
                 <form className="flex flex-col justify-center" autoComplete="off" onSubmit={(e) => signupUser(e)}>
