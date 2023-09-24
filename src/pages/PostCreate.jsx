@@ -4,14 +4,12 @@ import { useContext, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../components/Loading";
 import UserContext from "../MyContext";
 import { Helmet } from "react-helmet";
 
 export default function PostCreate() {
     const [input, setInput] = useState("")
     const { user, isAuthenticated } = useContext(UserContext);
-    const [loading, setLoading] = useState(false)
     const [project, setProject] = useState({
         link: "",
         author: "",
@@ -19,21 +17,19 @@ export default function PostCreate() {
         technologies: []
     })
     const navigate = useNavigate();
-    const handleSubmit = (element) => {
+    const handleSubmit = async (element) => {
         element.preventDefault();
-
-        setLoading(true);
-        axios.post(`${import.meta.env.VITE_API_URL}/api/projects`, project, { headers: { 'Authorization': localStorage.getItem('token') } }).then((res) => {
-            console.log(res.data);
-            toast.success("Project Posted Successfully");
+        try {
+            let res = await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/projects`, project, { headers: { 'Authorization': localStorage.getItem('token') } }), {
+                pending: 'Uploading project...',
+                success: "Project Uploaded Successfully!!",
+                error: 'Error uploading project!!',
+            });
             navigate(`/post/${res.data._id}`);
-            setLoading(false);
-        }).catch((err) => {
-            // toast.error(err);
-            console.log(err);
-            setLoading(false);
+        } catch (error) {
+            console.log(error);
             navigate("/");
-        });
+        }
     }
 
     useEffect(() => {
@@ -50,7 +46,6 @@ export default function PostCreate() {
             <Helmet>
                 <title>Devcritique | Create Post</title>
             </Helmet>
-            {loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} text={"Uploading Project..."} />}
             <div className='max-w-2xl max-md:mx-5 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>
                 <h1 className='text-3xl '>Post Project</h1>
                 <form onSubmit={handleSubmit}>
@@ -76,7 +71,7 @@ export default function PostCreate() {
                         </span>
                     })}</div>
                     <input type="text" placeholder="Add technologies separated by , (comma) " onKeyDown={(e) => {
-                        if (e.key == 'Enter' || e.keyCode == 188) {
+                        if (e.key == 'Enter' || e.keyCode == 188 || e.keyCode == 229) {
                             e.preventDefault();
                             let val = input.trim()
                             if (val) {

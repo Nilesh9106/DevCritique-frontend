@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from "react";
-import { CgProfile, CgSun } from "react-icons/cg";
+import { CgMenu, CgProfile, CgSun } from "react-icons/cg";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import { PiMoonStarsDuotone } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import UserContext from "../MyContext";
 
-export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
+export default function Navbar({ isAuthenticated, setIsAuthenticated, sidebar, setSidebar }) {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const { user, updateUser } = useContext(UserContext);
@@ -29,8 +29,9 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated }) {
 
   return (
     <>
-      <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 z-40 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
+      <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 z-30 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
         <Link to={"/"} className="text-xl flex gap-2 items-center">
+          <CgMenu className="lg:hidden mx-1 text-xl" onClick={() => setSidebar(!sidebar)} />
           <img
             src="/icon2.png"
             className="h-9 aspect-square"

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import NotFound from "./pages/NotFound"
-import { ToastContainer, toast } from "react-toastify"
+import { ToastContainer, toast, Slide } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import PostCreate from "./pages/PostCreate"
 import EditProfile from "./pages/EditProfile"
@@ -24,6 +24,7 @@ import ForgotPassword from "./pages/ForgotPassword"
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [user, setUser] = useState({})
+  const [sidebar, setSidebar] = useState(false);
   const navigate = useNavigate();
 
   const updateUser = () => {
@@ -63,17 +64,18 @@ function App() {
   return (
 
     <UserContext.Provider value={{ user: user, updateUser: updateUser, isAuthenticated: isAuthenticated }}>
-      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} sidebar={sidebar} setSidebar={setSidebar} />
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
+        transition={Slide}
         hideProgressBar={false}
         newestOnTop
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
+        pauseOnHover={false}
         theme="colored"
       />
       <Routes>
@@ -81,7 +83,7 @@ function App() {
           <Route path="*" element={<Loading className={'dark:bg-neutral-900 bg-neutral-100 h-[100vh] fixed top-0'} text={"initial Loading..."} />} />
           :
           <>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home sidebar={sidebar} setSidebar={setSidebar} />} />
             <Route path="/login" element={<Login isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/signup" element={<Signup isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/search" element={<Search />} />
@@ -91,7 +93,7 @@ function App() {
             <Route path="/notfound" element={<NotFound />} />
             <Route path="/technologies/:technology" element={<Technologies />} />
             <Route path="/:username" element={<Profile />} />
-			<Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:uniqueString" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </>

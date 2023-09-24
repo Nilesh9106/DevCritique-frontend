@@ -13,7 +13,7 @@ import UserContext from "../MyContext";
 export default function Post() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, isAuthenticated } = useContext(UserContext);
   const [review, setReview] = useState({});
   const [project, setProject] = useState({});
   const [reviews, setReviews] = useState([]);
@@ -45,27 +45,27 @@ export default function Post() {
   }
 
   const handleReview = async () => {
-    if (localStorage.getItem('token') == '' || !localStorage.getItem('token') || !user._id) {
-      toast.error("Please login for reviewing project!!")
+    if (!isAuthenticated) {
+      toast.error("Please login to review the project!!")
+      return;
     }
-    setLoading(true);
-    setLoadingText("Uploading review...");
+
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review, { headers: { 'Authorization': localStorage.getItem('token') } });
+      const res = await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review, { headers: { 'Authorization': localStorage.getItem('token') } }), {
+        pending: 'Uploading review...',
+        success: "Thanks for reviewing project :)",
+        error: 'Error uploading review!!',
+      });
       console.log(res.status);
       getProject();
-      toast.success("Thanks for reviewing project :)")
-      setLoading(false)
     } catch (error) {
-      // Handle error if the request fails
       console.error('Error uploading review:', error);
-      setLoading(false)
     }
     setReview({
       ...review,
       text: "",
     })
-    setLoadingText("");
+
   }
 
   useEffect(() => {
@@ -97,13 +97,13 @@ export default function Post() {
 
           </Helmet>
 
-          <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex justify-center items-center  py-3  `}>
+          <div className={`mx-auto lg:w-[60%]  sm:w-3/4  w-full flex justify-center items-center  py-3  `}>
             {!loading && project.link && <Project removeProject={() => {
               navigate('/');
             }} setLoading={setLoading} {...project} detail={true} />}
           </div>
-          <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4  w-[95%] flex flex-col justify-center  py-3  `}>
-            <div>
+          <div className={`mx-auto lg:w-[60%] px-2 sm:w-3/4 w-full flex flex-col justify-center items-center  pb-2  `}>
+            <div className=" w-full">
               <textarea name="review" value={review.text} onChange={(e) => {
                 setReview({ ...review, text: e.target.value })
               }} placeholder='Description of your Review' className='w-full resize-none px-3 py-1 my-1 rounded-md dark:bg-neutral-900 outline-none transition-all border dark:border-neutral-800 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200' cols="30" rows="3">

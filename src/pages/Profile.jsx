@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
-
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Projects from "../components/Projects";
-import Reviews from "../components/Reviews";
 import { SiGithub, SiInstagram, SiLinkedin, SiTwitter } from 'react-icons/si'
 import { BiWorld } from "react-icons/bi"
 import axios from "axios";
 import Loading from "../components/Loading";
 import { Helmet } from "react-helmet";
+import { motion } from "framer-motion";
 import UserContext from "../MyContext";
+import Review from "../components/Review";
+import Project from "../components/Project";
 
 export default function Profile() {
     const { user } = useContext(UserContext);
@@ -64,10 +64,10 @@ export default function Profile() {
             </Helmet>
             {loading && <Loading text={loadingText} />}
             {!loading && <>
-                <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700  py-5 px-3  `}>
+                <div className={`mx-auto lg:w-2/3 sm:w-3/4  w-[95%] flex justify-center  dark:bg-neutral-900/70 bg-neutral-100/70 rounded-md my-5 border dark:border-neutral-800  py-5 px-3  `}>
                     <div className="flex gap-5 flex-wrap justify-center items-center ">
                         <div className="img">
-                            <img src={userInfo.profilePicture || '/user.png'} alt={userInfo.username} className="rounded-full select-none sm:w-40 w-24 aspect-square" />
+                            <img src={userInfo.profilePicture || '/user.png'} alt={userInfo.username} className="rounded-full select-none sm:w-40 w-24 aspect-square object-cover" />
                         </div>
                         <div className="flex flex-col sm:mx-10 justify-center">
                             <div className="flex sm:gap-5 gap-3 items-center my-2">
@@ -99,7 +99,7 @@ export default function Profile() {
                         </div>
                     </div>
                 </div>
-                <ul className='mx-auto flex dark:bg-neutral-900/70 bg-neutral-100/70 backdrop-blur-sm  lg:w-2/3 sm:w-3/4  w-[95%]  rounded-b-md  my-5 border  dark:border-gray-700 py-4 px-3 justify-evenly items-center'>
+                <ul className='mx-auto flex dark:bg-neutral-900 bg-neutral-100 backdrop-blur-sm  lg:w-2/3 sm:w-3/4  w-[95%]  rounded-md  my-5 border  dark:border-neutral-800 py-4 px-3 justify-evenly items-center'>
                     <li className={`cursor-pointer ${tabName === "Project" ? "text-violet-400" : ""}`} onClick={() => {
                         setTabName("Project")
                     }}>Projects</li>
@@ -107,9 +107,38 @@ export default function Profile() {
                         setTabName("Review")
                     }}>Reviews</li>
                 </ul>
-                <div className='mx-auto max-sm:pb-20 lg:w-2/3 sm:w-3/4 w-[95%] flex dark:bg-neutral-900 bg-neutral-100/70 rounded-md my-5 border dark:border-gray-700   p-3  items-center'>
-                    {tabName === 'Project' && <Projects setLoading={setLoading} setProjectList={setProjects} projects={projects} />}
-                    {tabName === 'Review' && <Reviews setLoading={setLoading} reviews={reviews} setReviews={setReviews} />}
+                <div className='mx-auto max-sm:pb-20 lg:w-2/3 sm:w-3/4 w-[95%] flex  rounded-md my-3 items-center'>
+                    {tabName === 'Project' &&
+                        <motion.div className="w-full flex flex-col items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                            {projects.length == 0 ?
+                                <p className="text-center text-violet-600 text-2xl"> No projects yet!!</p>
+                                :
+                                projects.map((project, index) => {
+                                    // console.log(project);
+                                    return <Project removeProject={() => {
+                                        projects.splice(index, 1)
+                                        setProjects(projects);
+                                    }} setLoading={setLoading} key={index} {...project} />
+                                })}
+
+                        </motion.div>}
+
+
+                    {tabName === 'Review' &&
+                        <motion.div className="w-full flex flex-col items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                            {reviews.length == 0 ?
+                                <p className="text-center text-violet-600 text-2xl"> No review yet!!</p>
+                                :
+                                reviews.map((review, index) => {
+                                    // console.log(project);
+                                    return <Review key={index} {...review} onDelete={() => {
+                                        reviews.splice(index, 1);
+                                        setReviews([...reviews]);
+                                    }} />
+                                })}
+                        </motion.div>
+                    }
+
                 </div>
             </>
             }

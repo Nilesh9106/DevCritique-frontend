@@ -8,24 +8,28 @@ import { GoCommentDiscussion } from 'react-icons/go'
 import Sheet from 'react-modal-sheet';
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
-import Loading from "./Loading"
 import { Link } from 'react-router-dom';
 import UserContext from '../MyContext';
 import { MdDelete } from 'react-icons/md';
+import { BiSolidUpvote } from 'react-icons/bi';
 
 
 const snapPoints = [-120, 0.5, 0];
 const initialSnap = 0;
 
 
-function Review({ _id, text, rating, status, author, project, comments, onDelete, createdAt }) {
+function Review({ _id, text, rating, status, author, project, comments, onDelete, createdAt, upVote, upVoteCount }) {
     // const navigate = useNavigate();
-    const { user } = useContext(UserContext);
+    const { user, isAuthenticated } = useContext(UserContext);
     const [newStatus, setNewStatus] = useState(status);
     const [newRating, setNewRating] = useState(rating || 'null');
     const [loadingUpdate, setLoadingUpdate] = useState(false);
     const [commentList, setCommentList] = useState(comments);
-    const [loadingComment, setLoadingComment] = useState(false);
+    const [loadingUpVote, setLoadingUpVote] = useState(false);
+    const [upVoteState, setUpVoteState] = useState({
+        upVote: upVote ?? [],
+        upVoteCount: upVoteCount ?? 0,
+    })
     const [Comment, setComment] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const ref = useRef();
@@ -37,7 +41,7 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
         if (Comment == "") {
             return;
         }
-        if (localStorage.getItem("token") && user._id) {
+        if (isAuthenticated) {
             const obj = {
                 review: _id, comment: {
                     username: user.username,
@@ -45,9 +49,12 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
                 }
             }
             try {
-                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/comments`, obj);
+                const response = await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/comments`, obj), {
+                    pending: 'Uploading comment...',
+                    success: "Comment added successfully!!",
+                    error: 'Error uploading comment!!',
+                });
                 setCommentList(response.data.comments);
-                toast.success("comment added successfully!!");
             } catch (error) {
                 console.log(error);
                 toast.error("something went wrong!!");
@@ -63,7 +70,7 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
                 return;
             }
             setLoadingUpdate(true);
-            await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating }, { headers: { 'Authorization': localStorage.getItem('token') } });
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating == 'null' ? null : newRating }, { headers: { 'Authorization': localStorage.getItem('token') } });
 
             setLoadingUpdate(false);
             // console.log(res.data);
@@ -86,9 +93,43 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
         }
     }
 
+    const handleUpVote = async () => {
+        if (loadingUpVote) {
+            return;
+        }
+        if (isAuthenticated == false) {
+            toast.warn("Please login to upvote!!");
+            return;
+        }
+        setLoadingUpVote(true);
+        if (upVoteState.upVote.includes(user._id)) {
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/downvote/${_id}`, { userId: user._id }, { headers: { 'Authorization': localStorage.getItem('token') } });
+                setUpVoteState({
+                    upVote: response.data.upVote,
+                    upVoteCount: response.data.upVoteCount,
+                });
+                // console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/upvote/${_id}`, { userId: user._id }, { headers: { 'Authorization': localStorage.getItem('token') } });
+                setUpVoteState({
+                    upVote: response.data.upVote,
+                    upVoteCount: response.data.upVoteCount,
+                });
+                // console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        setLoadingUpVote(false);
+    }
     return (
         <>
-            <div className='p-4 cursor-pointer w-full my-2 rounded max-sm:px-2  border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/20 flex gap-2 '>
+            <div className='px-4 pt-4 pb-2 transition-colors dark:bg-neutral-900 bg-neutral-50 w-full m-2 rounded-xl max-sm:px-2  border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/40 flex gap-2 '>
 
                 <div className='px-2 max-sm:px-0 flex w-full flex-col  gap-1'>
                     <div className='flex justify-between flex-wrap items-center gap-2 w-full'>
@@ -142,24 +183,30 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
                             }
                         </div>
                     </div>
-                    <p className='max-sm:text-sm px-2'>{text}</p>
+                    <p className='max-sm:text-sm px-2 py-3'>{text}</p>
 
-                    <button onClick={() => setIsOpen(!isOpen)} className='flex gap-3 mt-2 px-3 py-1 rounded-xl items-center dark:hover:bg-neutral-800 hover:bg-neutral-200'><GoCommentDiscussion className='text-xl' /> <span>Discuss</span><span className='w-5 h-5 text-sm flex justify-center items-center bg-red-500 rounded-full '>{commentList.length}</span></button>
+                    <div className='flex mt-2 pt-2 justify-around border-t dark:border-neutral-800'>
+                        <button onClick={handleUpVote} className='flex gap-1 px-3 py-2 rounded-xl items-center dark:hover:bg-neutral-800/30 hover:bg-neutral-200'>
+                            <BiSolidUpvote className={`text-xl  ${upVoteState.upVote.includes(user._id) ? 'text-green-500' : ""}`} />
+                            <span className='w-5 h-5 text-sm flex justify-center items-center '>{upVoteState.upVoteCount}</span>
+                            {loadingUpVote && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-violet-700"></div>}
+                        </button>
+                        <button onClick={() => setIsOpen(!isOpen)} className='flex gap-1  px-3 py-2 rounded-xl items-center dark:hover:bg-neutral-800/30 hover:bg-neutral-200'>
+                            <GoCommentDiscussion className='text-xl' />
+                            <span className='w-5 h-5 text-sm flex justify-center items-center '>{commentList.length}</span>
+                        </button>
+                    </div>
+
                 </div>
             </div>
             <Sheet ref={ref} snapPoints={snapPoints} initialSnap={initialSnap} isOpen={isOpen} onClose={() => setIsOpen(false)} >
                 <Sheet.Container style={{ backgroundColor: localStorage.getItem("theme") == "dark" ? "#141414" : "white" }}>
                     <Sheet.Header >
-                        {loadingComment && <Loading />}
                         <div className='flex flex-col relative py-2'>
                             <h1 className='text-2xl my-2 text-center'>Discuss</h1>
                             <div className='flex gap-3 sm:w-2/3 w-full max-sm:px-3 items-center mx-auto'>
                                 <input value={Comment} onChange={(e) => setComment(e.target.value)} type="text" className='w-[80%] px-3 py-1 my-2 rounded-md dark:bg-neutral-900 outline-none transition-all border dark:border-neutral-800 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-neutral-700' />
-                                <button onClick={async () => {
-                                    setLoadingComment(true);
-                                    await doComment();
-                                    setLoadingComment(false);
-                                }} className='w-[20%] px-2 py-1.5 my-2 text-neutral-200 rounded-md bg-violet-600 hover:bg-violet-500 transition-all duration-300 max-sm:text-sm'>
+                                <button onClick={doComment} className='w-[20%] px-2 py-1.5 my-2 text-neutral-200 rounded-md bg-violet-600 hover:bg-violet-500 transition-all duration-300 max-sm:text-sm'>
                                     Comment
                                 </button>
                             </div>
