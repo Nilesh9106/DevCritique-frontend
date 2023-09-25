@@ -5,12 +5,20 @@ import User from './User';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import UserContext from '../MyContext';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import { BiHeart } from 'react-icons/bi';
+import { GoHeartFill } from 'react-icons/go';
 
 
-function OpenGraphDetails({ removeProject, setLoading, description, link, author, _id, ogDetails, technologies, detail, createdAt }) {
+function OpenGraphDetails({ removeProject, setLoading, description, link, author, _id, ogDetails, technologies, detail, createdAt, like, likeCount }) {
     const navigate = useNavigate();
-    const { user } = useContext(UserContext);
+    const { user, isAuthenticated } = useContext(UserContext);
+    const [loadingLike, setLoadingLike] = useState(false);
+    const [LikeState, setLikeState] = useState({
+        like: like ?? [],
+        likeCount: likeCount ?? 0,
+    });
+
     // console.log(createdAt);
     const deleteProject = async () => {
         if (confirm("Are You sure to delete this Project?")) {
@@ -26,7 +34,41 @@ function OpenGraphDetails({ removeProject, setLoading, description, link, author
             }
         }
     }
-
+    const handleLike = async (e) => {
+        e.stopPropagation();
+        if (loadingLike) {
+            return;
+        }
+        if (isAuthenticated == false) {
+            toast.warn("Please login to Like!!");
+            return;
+        }
+        setLoadingLike(true);
+        if (LikeState.like.includes(user._id)) {
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/projects/dislike/${_id}`, { userId: user._id }, { headers: { 'Authorization': localStorage.getItem('token') } });
+                setLikeState({
+                    like: response.data.like,
+                    likeCount: response.data.likeCount,
+                });
+                // console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/projects/like/${_id}`, { userId: user._id }, { headers: { 'Authorization': localStorage.getItem('token') } });
+                setLikeState({
+                    like: response.data.like,
+                    likeCount: response.data.likeCount,
+                });
+                // console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        setLoadingLike(false);
+    }
     return (
         <>
             <div onClick={() => navigate(`/post/${_id}`)} className='p-4 dark:bg-neutral-900 bg-neutral-50 cursor-pointer m-2 rounded-xl max-sm:px-2 w-full border dark:border-neutral-800 border-neutral-300 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/40 flex gap-2 transition-colors '>
@@ -69,6 +111,18 @@ function OpenGraphDetails({ removeProject, setLoading, description, link, author
                     ) :
                         <Link to={link} className='underline underline-offset-2 text-violet-500'>{link}</Link>
                     }
+                    <div className='flex mt-2 pt-2 justify-start border-t dark:border-neutral-800'>
+                        <button onClick={handleLike} className='flex  justify-center px-3 py-2 rounded-xl items-center dark:hover:bg-neutral-800/30 hover:bg-neutral-200'>
+
+                            {LikeState.like.includes(user._id) ?
+                                <GoHeartFill className='text-xl text-red-500' />
+                                :
+                                <BiHeart className={`text-xl`} />
+                            }
+                            <span className='w-5 h-5 text-sm flex justify-center items-center '>{LikeState.likeCount}</span>
+                            {loadingLike && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-violet-700"></div>}
+                        </button>
+                    </div>
                 </div>
             </div>
         </>

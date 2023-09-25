@@ -69,6 +69,10 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
             if (status == newStatus && rating == newRating) {
                 return;
             }
+            if ((newStatus == 'rejected' || newStatus == "pending") && newRating != 'null') {
+                setNewRating('null');
+            }
+
             setLoadingUpdate(true);
             await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating == 'null' ? null : newRating }, { headers: { 'Authorization': localStorage.getItem('token') } });
 

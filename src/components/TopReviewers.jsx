@@ -41,6 +41,7 @@ export default function TopReviewers({ sidebar, setSidebar, desktop }) {
                     <div className="dark:bg-neutral-900 bg-neutral-50 rounded-xl border my-2 dark:border-neutral-800 border-neutral-300">
                         {loading ? <Loading width={60} height={60} /> :
                             <div className="flex flex-col gap-4 p-2">
+                                {topUsers.length === 0 && <h1 className="text-lg">No Top Reviewers Yet!!</h1>}
                                 {topUsers.map((user, index) => {
                                     return <Link to={`/@${user.username}`} key={index} className="flex gap-2 items-center">
                                         <img src={user.profilePicture} alt="profile" className="w-10 h-10 rounded-full object-cover" />

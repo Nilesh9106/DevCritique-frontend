@@ -49,6 +49,10 @@ export default function Post() {
       toast.error("Please login to review the project!!")
       return;
     }
+    if (user._id == project.author._id) {
+      toast.error("You can't review your own project!!")
+      return;
+    }
 
     try {
       const res = await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/`, review, { headers: { 'Authorization': localStorage.getItem('token') } }), {
