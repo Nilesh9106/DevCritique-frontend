@@ -30,15 +30,17 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, sidebar, s
   return (
     <>
       <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 z-30 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
-        <Link to={"/"} className="text-xl flex gap-2 items-center">
-          <CgMenu className="lg:hidden mx-1 text-xl" onClick={() => setSidebar(!sidebar)} />
-          <img
-            src="/icon2.png"
-            className="h-9 aspect-square"
-            alt="dev critique"
-          />
-          DEV CRITIQUE
-        </Link>
+        <div className="text-xl flex gap-2 items-center" >
+          <CgMenu className="lg:hidden text-xl mx-1" onClick={() => setSidebar(!sidebar)} />
+          <Link to={"/"} className="text-xl flex gap-2 items-center" >
+            <img
+              src="/icon2.png"
+              className="h-9 aspect-square"
+              alt="dev critique"
+            />
+            DEV CRITIQUE
+          </Link>
+        </div>
         <div className="flex items-center">
           <Link
             to={"/search"}
@@ -120,7 +122,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, sidebar, s
             <Link
               to={"/"}
               onClick={async () => {
-                localStorage.clear();
+                localStorage.removeItem("token")
                 setIsAuthenticated(false);
                 await updateUser();
                 setDropDown(false);

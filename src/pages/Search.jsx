@@ -39,7 +39,7 @@ function Search() {
                     return <Project key={index} removeProject={() => {
                         projects.slice(index, 1);
                         setProjects(projects);
-                    }} setLoading={setLoading} _id={project._id} author={project.author[0]} link={project.link} description={project.description} ogDetails={project.ogDetails} technologies={project.technologies} />
+                    }} setLoading={setLoading} _id={project._id} author={project.author[0]} link={project.link} description={project.description} ogDetails={project.ogDetails} technologies={project.technologies} like={project.like} likeCount={project.likeCount} createdAt={project.createdAt} />
                 })}
             </div>}
         </>

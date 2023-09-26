@@ -9,6 +9,7 @@ import Sheet from 'react-modal-sheet';
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+
 import UserContext from '../MyContext';
 import { MdDelete } from 'react-icons/md';
 import { BiSolidUpvote } from 'react-icons/bi';
@@ -30,9 +31,11 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
         upVote: upVote ?? [],
         upVoteCount: upVoteCount ?? 0,
     })
+
     const [Comment, setComment] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const ref = useRef();
+
 
 
     // console.log(comments);
@@ -204,12 +207,12 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
                 </div>
             </div>
             <Sheet ref={ref} snapPoints={snapPoints} initialSnap={initialSnap} isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <Sheet.Container style={{ backgroundColor: localStorage.getItem("theme") == "dark" ? "#141414" : "white" }}>
-                    <Sheet.Header >
+                <Sheet.Container>
+                    <Sheet.Header className='dark:bg-neutral-900 bg-neutral-100' >
                         <div className='flex flex-col relative py-2'>
                             <h1 className='text-2xl my-2 text-center'>Discuss</h1>
                             <div className='flex gap-3 sm:w-2/3 w-full max-sm:px-3 items-center mx-auto'>
-                                <input value={Comment} onChange={(e) => setComment(e.target.value)} type="text" className='w-[80%] px-3 py-1 my-2 rounded-md dark:bg-neutral-900 outline-none transition-all border dark:border-neutral-800 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-neutral-700' />
+                                <input value={Comment} onChange={(e) => setComment(e.target.value)} type="text" className='w-[80%] px-3 py-1 my-2 rounded-md dark:bg-neutral-900 outline-none  border dark:border-neutral-800 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-neutral-700' />
                                 <button onClick={doComment} className='w-[20%] px-2 py-1.5 my-2 text-neutral-200 rounded-md bg-violet-600 hover:bg-violet-500 transition-all duration-300 max-sm:text-sm'>
                                     Comment
                                 </button>
@@ -219,7 +222,7 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
                             </button>
                         </div>
                     </Sheet.Header>
-                    <Sheet.Content style={{ paddingBottom: ref.current?.y }} >
+                    <Sheet.Content style={{ paddingBottom: ref.current?.y }} className='dark:bg-neutral-900 bg-neutral-100' >
                         <Sheet.Scroller>
                             <div className='sm:w-2/3 w-full max-sm:px-3 flex flex-col gap-4 mx-auto'>
                                 {

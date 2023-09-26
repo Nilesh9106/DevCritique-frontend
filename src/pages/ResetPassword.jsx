@@ -16,31 +16,33 @@ export default function ResetPassword() {
 
 	const savePassword = async (e) => {
 		e.preventDefault();
-		setLoading(true)
 		if (password !== confirmPassword) {
 			toast.error("Passwords does not match")
-			setLoading(false)
-			return
+			return;
 		}
-		const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/reset-password`, { password, uniqueString })
-		if (200 === response.status) {
-			toast.success("Password Changed Successfully")
-			setLoading(false)
+		try {
+			await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/reset-password`, { password, uniqueString }), {
+				pending: 'Resetting Password',
+				success: 'Password Reset Successfully',
+			});
+
 			navigate('/login')
+
+		} catch (error) {
+			toast.error(error.response.data.message)
 		}
-		else {
-			toast.error(response.data.message)
-			setLoading(false)
-		}
+
 	}
 	const checkValidString = useCallback(async () => {
 		setLoading(true)
-		const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/is-valid-link/${uniqueString} `)
-		if (200 === response.status) {
+		try {
+			await axios.get(`${import.meta.env.VITE_API_URL}/api/is-valid-link/${uniqueString}`)
 			setValidString(true)
-		}
-		else {
+		} catch (error) {
 			setValidString(false)
+			if (error.response) {
+				toast.error(error.response.data.message)
+			}
 		}
 		setLoading(false)
 	}, [])
@@ -54,8 +56,8 @@ export default function ResetPassword() {
 				<title>Devcritique | Reset Password</title>
 			</Helmet>
 			{loading && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} text={"Loading"} />}
-			{!loading && !isValidString && <Loading className={'dark:bg-neutral-900/30 bg-neutral-100/30 h-[100vh] fixed top-0 backdrop-blur-[1px]'} text={"Invalid Link"} />}
-			{!loading &&
+
+			{!loading && isValidString &&
 				<div className='max-w-2xl max-md:mx-10 my-10 px-3 py-5 dark:bg-neutral-900 bg-neutral-100 mx-auto rounded-md border dark:border-neutral-800 border-neutral-200 shadow-lg'>
 					<h1 className="text-center text-4xl my-2">Reset Password</h1>
 					<form className="flex flex-col  justify-center" onSubmit={(e) => savePassword(e)}>

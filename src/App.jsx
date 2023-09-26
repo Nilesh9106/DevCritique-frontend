@@ -46,12 +46,19 @@ function App() {
         navigate("/")
       }
     }).catch((err) => {
-      localStorage.clear()
-      setIsAuthenticated(false)
-      setUser({})
-      console.log(err);
-      toast.error("something went wrong!!")
-      navigate('/');
+      if (err.code == "ERR_NETWORK") {
+        console.log(err, err.code);
+        toast.error("No internet connection!!")
+        navigate('/');
+        return;
+      } else {
+        localStorage.removeItem('token')
+        setIsAuthenticated(false)
+        setUser({})
+        console.log(err);
+        toast.error("something went wrong!!")
+        navigate('/');
+      }
     })
   }
 

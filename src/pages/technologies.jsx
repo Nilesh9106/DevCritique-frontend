@@ -55,6 +55,9 @@ function Technologies() {
                 link={project.link}
                 description={project.description}
                 ogDetails={project.ogDetails}
+                like={project.like}
+                createdAt={project.createdAt}
+                likeCount={project.likeCount}
                 technologies={project.technologies}
               />
             );
