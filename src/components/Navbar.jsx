@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { CgMenu, CgProfile, CgSun } from "react-icons/cg";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import { PiMoonStarsDuotone } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import UserContext from "../MyContext";
 
 export default function Navbar({ isAuthenticated, setIsAuthenticated, sidebar, setSidebar }) {
@@ -15,6 +15,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, sidebar, s
       setIsDarkTheme(true);
     }
   }, []);
+  const location = useLocation();
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -31,7 +32,7 @@ export default function Navbar({ isAuthenticated, setIsAuthenticated, sidebar, s
     <>
       <nav className="dark:bg-neutral-900/60 sticky top-0 h-16 z-30 bg-neutral-100/60 backdrop-blur-sm flex  justify-between items-center sm:px-10 px-4 py-3 ">
         <div className="text-xl flex gap-2 items-center" >
-          <CgMenu className="lg:hidden text-xl mx-1" onClick={() => setSidebar(!sidebar)} />
+          {location.pathname == "/" && <CgMenu className="lg:hidden text-xl mx-1" onClick={() => setSidebar(!sidebar)} />}
           <Link to={"/"} className="text-xl flex gap-2 items-center" >
             <img
               src="/icon2.png"

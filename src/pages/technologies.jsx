@@ -59,6 +59,7 @@ function Technologies() {
                 createdAt={project.createdAt}
                 likeCount={project.likeCount}
                 technologies={project.technologies}
+                images={project.images}
               />
             );
           })}

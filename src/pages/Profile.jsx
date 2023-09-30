@@ -48,7 +48,7 @@ export default function Profile() {
         } else {
             getProjects();
         }
-    }, [])
+    }, [username])
 
     return (
         <>

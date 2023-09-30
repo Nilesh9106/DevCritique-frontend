@@ -87,7 +87,7 @@ function App() {
       />
       <Routes>
         {isAuthenticated === null ?
-          <Route path="*" element={<Loading className={'dark:bg-neutral-900 bg-neutral-100 h-[100vh] fixed top-0'} text={"initial Loading..."} />} />
+          <Route path="*" element={<Loading className={'dark:bg-neutral-900 bg-neutral-100 h-[100vh] fixed top-0'} />} />
           :
           <>
             <Route path="/" element={<Home sidebar={sidebar} setSidebar={setSidebar} />} />

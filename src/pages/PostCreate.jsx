@@ -14,12 +14,37 @@ export default function PostCreate() {
         link: "",
         author: "",
         description: "",
-        technologies: []
+        technologies: [],
+        images: []
     })
+    const [images, setImages] = useState([]);
     const navigate = useNavigate();
+
+    const uploadImages = async () => {
+        for (let i = 0; i < images.length; i++) {
+            const formData = new FormData();
+            formData.append('file', images[i]);
+            const res = await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/file/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    "Authorization": localStorage.getItem('token')
+                }
+            }), {
+                pending: `Uploading image ${i + 1} ...`,
+            });
+            project.images.push(res.data.fileURL);
+            setProject({ ...project, images: project.images });
+        }
+    }
+
     const handleSubmit = async (element) => {
         element.preventDefault();
+
+
         try {
+            if (images.length > 0) {
+                await uploadImages();
+            }
             let res = await toast.promise(axios.post(`${import.meta.env.VITE_API_URL}/api/projects`, project, { headers: { 'Authorization': localStorage.getItem('token') } }), {
                 pending: 'Uploading project...',
                 success: "Project Uploaded Successfully!!",
@@ -100,6 +125,30 @@ export default function PostCreate() {
                         }
                     }} className="w-full px-3 py-1 my-3 rounded-md dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-200" />
 
+                    <input type="file" accept=".jpg, .jpeg, .png" onChange={(e) => {
+                        if (images.length >= 3) {
+                            toast.warn("You can upload maximum 3 images!!");
+                            return;
+                        }
+                        if (e.target.files[0].size > 1024 * 1024 * 2) {
+                            toast.warn("Image size should be less than 6MB!!");
+                            return;
+                        }
+                        setImages([...images, ...e.target.files]);
+                    }} className="w-full my-3 rounded-md dark:bg-neutral-800 outline-none transition-all border dark:border-neutral-700 border-neutral-400 focus:border-violet-500 focus:ring-1 focus:ring-neutral-500-200" />
+                    <div className="w-full overflow-x-scroll flex snap-x snap-mandatory ">
+                        {images.map((value, index) => {
+                            return <div key={index} className="min-w-full py-4 relative flex justify-center  snap-start img">
+                                <img key={index} src={URL.createObjectURL(value)} className="object-contain   h-80 selection:bg-none " />
+                                <button onClick={() => {
+                                    images.splice(index, 1);
+                                    setImages([...images]);
+                                }} className="p-1 rounded-full absolute z-20 top-2 right-3 hover:bg-violet-500 transition-all">
+                                    <IoClose className="text-lg " />
+                                </button>
+                            </div>
+                        })}
+                    </div>
                     <button type="submit" className="w-full px-3 py-1 my-3 text-neutral-200 rounded-md bg-violet-600 hover:bg-violet-500 transition-all duration-300" >Submit</button>
                 </form>
             </div>
