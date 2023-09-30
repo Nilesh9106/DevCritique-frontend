@@ -5,6 +5,7 @@
 * {
     box-sizing: border-box;
     margin: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -22,6 +23,7 @@
     border-radius: 10px;
     @apply bg-violet-500
 }
+
 
 .img:after {
     content: " ";
