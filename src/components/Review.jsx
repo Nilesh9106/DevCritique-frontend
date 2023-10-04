@@ -19,7 +19,7 @@ const snapPoints = [-120, 0.5, 0];
 const initialSnap = 0;
 
 
-function Review({ _id, text, rating, status, author, project, comments, onDelete, createdAt, upVote, upVoteCount }) {
+function Review({ _id, text, rating, status, author, project, comments, onDelete, createdAt, upVote, upVoteCount, onUpdate }) {
     // const navigate = useNavigate();
     const { user, isAuthenticated } = useContext(UserContext);
     const [newStatus, setNewStatus] = useState(status);
@@ -35,8 +35,6 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
     const [Comment, setComment] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const ref = useRef();
-
-
 
     // console.log(comments);
     // console.log(newRating, newStatus, rating, status);
@@ -77,8 +75,8 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
             }
 
             setLoadingUpdate(true);
-            await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating == 'null' ? null : newRating }, { headers: { 'Authorization': localStorage.getItem('token') } });
-
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/reviews/${_id}`, { status: newStatus, rating: newRating == 'null' ? null : newRating }, { headers: { 'Authorization': localStorage.getItem('token') } })
+            onUpdate(newRating, newStatus);
             setLoadingUpdate(false);
             // console.log(res.data);
         } catch (error) {
@@ -180,7 +178,7 @@ function Review({ _id, text, rating, status, author, project, comments, onDelete
                                         {(newRating != `${rating}` || newStatus != status) &&
                                             <>
                                                 <button onClick={handleUpdate} className={`rounded-full  capitalize hover:bg-neutral-200 dark:hover:bg-neutral-900  p-2 aspect-square transition-all duration-300 shadow-lg`}><SlRefresh className='text-xl max-sm:text-base font-bold' /></button>
-                                                {loadingUpdate && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>}
+                                                {loadingUpdate && <div className="animate-spin rounded-full h-5 w-5 border-b-2 dark:border-white border-neutral-900"></div>}
                                             </>
                                         }
                                     </>

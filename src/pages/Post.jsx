@@ -121,6 +121,14 @@ export default function Post() {
                 return <Review key={index} {...value} onDelete={() => {
                   reviews.splice(index, 1);
                   setReviews([...reviews]);
+                }} onUpdate={(newRating, newStatus) => {
+                  setReviews(reviews.map((review) => {
+                    if (review._id == value._id) {
+                      review.rating = newRating;
+                      review.status = newStatus;
+                    }
+                    return review;
+                  }))
                 }} />
               })
             }
